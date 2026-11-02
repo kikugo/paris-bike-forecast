@@ -1,6 +1,6 @@
 # Lean local stack. Docker Desktop is shared with other projects, so every service has a
 # memory cap and Airflow runs as a single `airflow standalone` container (LocalExecutor).
-# Expected use is about 1.5 GiB; the caps add up to about 2.6 GiB.
+# Expected use is about 1.6 GiB; the caps add up to about 3.1 GiB.
 
 x-logging: &logging
   driver: local
@@ -39,7 +39,7 @@ services:
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
-      AIRFLOW__CORE__PARALLELISM: "4"
+      AIRFLOW__CORE__PARALLELISM: "2"
       AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_ALL_ADMINS: "true"
       AIRFLOW__API__WORKERS: "1"
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:${AIRFLOW_DB_PASSWORD}@postgres:5432/airflow
@@ -58,7 +58,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    mem_limit: 1536m
+    mem_limit: 2048m
     logging: *logging
 
   mlflow:
@@ -66,6 +66,10 @@ services:
       context: .
       dockerfile: docker/mlflow.Dockerfile
     image: paris-bike-forecast/mlflow:3.17.2
+    environment:
+      # The job runner serves GenAI scorers, which this project does not use, and it
+      # starts extra worker processes that push the container past its memory cap.
+      MLFLOW_SERVER_ENABLE_JOB_EXECUTION: "false"
     command: >
       mlflow server
       --backend-store-uri postgresql://mlflow:${MLFLOW_DB_PASSWORD}@postgres:5432/mlflow
