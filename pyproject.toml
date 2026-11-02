@@ -1,0 +1,22 @@
+[project]
+name = "paris-bike-forecast"
+version = "0.1.0"
+description = "Hourly forecasts for Paris bike counters with rolling backtests, quantile models and drift monitoring"
+readme = "README.md"
+authors = [
+    { name = "Karthik Reddy Changal", email = "83645138+kikugo@users.noreply.github.com" }
+]
+requires-python = ">=3.12"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+    "ruff>=0.17.3",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
