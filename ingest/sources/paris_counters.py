@@ -93,7 +93,7 @@ def _coords(values: pd.Series) -> tuple[pd.Series, pd.Series]:
     return lat, lon
 
 
-def read_history_csv(raw: io.BufferedIOBase, chunksize: int = 200_000) -> Iterator[pd.DataFrame]:
+def read_history_csv(raw: io.BufferedIOBase, chunksize: int = 100_000) -> Iterator[pd.DataFrame]:
     """Stream one historical CSV as normalised chunks (UTC timestamps, numeric counts)."""
     buffered = io.BufferedReader(raw) if not hasattr(raw, "peek") else raw
     encoding, sep = _sniff(buffered.peek(65536)[:65536])
@@ -116,7 +116,7 @@ def read_history_csv(raw: io.BufferedIOBase, chunksize: int = 200_000) -> Iterat
         yield chunk
 
 
-def read_history_zip(path: Path, chunksize: int = 200_000) -> Iterator[pd.DataFrame]:
+def read_history_zip(path: Path, chunksize: int = 100_000) -> Iterator[pd.DataFrame]:
     with zipfile.ZipFile(path) as zf:
         name = next(n for n in zf.namelist() if n.endswith(".csv"))
         with zf.open(name) as raw:
