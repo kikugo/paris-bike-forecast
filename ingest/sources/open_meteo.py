@@ -33,6 +33,12 @@ def parse_hourly(payload: dict, source: str) -> pd.DataFrame:
     return df.dropna(subset=VARIABLES, how="all").reset_index(drop=True)
 
 
+def observed_only(df: pd.DataFrame, now: pd.Timestamp | None = None) -> pd.DataFrame:
+    """Drop hours after `now`: both endpoints also return model values for later today."""
+    now = (now or pd.Timestamp.now(tz="UTC")).floor("h")
+    return df[df["ts"] <= now].reset_index(drop=True)
+
+
 def _params(**extra) -> dict:
     return {
         "latitude": config.PARIS_LAT,
@@ -48,13 +54,11 @@ def archive(client: httpx.Client, start: date, end: date) -> pd.DataFrame:
         ARCHIVE_URL, params=_params(start_date=start.isoformat(), end_date=end.isoformat())
     )
     resp.raise_for_status()
-    return parse_hourly(resp.json(), "archive")
+    return observed_only(parse_hourly(resp.json(), "archive"))
 
 
 def recent(client: httpx.Client, past_days: int = 2) -> pd.DataFrame:
     """Observed hours of the last `past_days` days from the forecast API (no future hours)."""
     resp = client.get(FORECAST_URL, params=_params(past_days=past_days, forecast_days=1))
     resp.raise_for_status()
-    df = parse_hourly(resp.json(), "forecast")
-    now = pd.Timestamp.now(tz="UTC").floor("h")
-    return df[df["ts"] <= now].reset_index(drop=True)
+    return observed_only(parse_hourly(resp.json(), "forecast"))
