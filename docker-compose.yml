@@ -1,6 +1,6 @@
 # Lean local stack. Docker Desktop is shared with other projects, so every service has a
 # memory cap and Airflow runs as a single `airflow standalone` container (LocalExecutor).
-# Expected use is about 1.6 GiB; the caps add up to about 3.1 GiB.
+# Expected use is about 1.8 GiB; the caps add up to about 3.3 GiB.
 
 x-logging: &logging
   driver: local
@@ -102,7 +102,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    mem_limit: 256m
+    mem_limit: 384m
     logging: *logging
 
 volumes:
