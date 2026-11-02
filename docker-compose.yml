@@ -1,0 +1,107 @@
+# Lean local stack. Docker Desktop is shared with other projects, so every service has a
+# memory cap and Airflow runs as a single `airflow standalone` container (LocalExecutor).
+# Expected use is about 1.5 GiB; the caps add up to about 2.6 GiB.
+
+x-logging: &logging
+  driver: local
+  options:
+    max-size: 10m
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      AIRFLOW_DB_PASSWORD: ${AIRFLOW_DB_PASSWORD}
+      MLFLOW_DB_PASSWORD: ${MLFLOW_DB_PASSWORD}
+      BIKES_DB_PASSWORD: ${BIKES_DB_PASSWORD}
+      GRAFANA_DB_PASSWORD: ${GRAFANA_DB_PASSWORD}
+    command: ["postgres", "-c", "shared_buffers=64MB", "-c", "max_connections=60"]
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./sql/init:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "127.0.0.1:5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      retries: 20
+    mem_limit: 384m
+    logging: *logging
+
+  airflow:
+    build:
+      context: .
+      dockerfile: docker/airflow.Dockerfile
+    image: paris-bike-forecast/airflow:3.3.2
+    command: standalone
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__CORE__PARALLELISM: "4"
+      AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_ALL_ADMINS: "true"
+      AIRFLOW__API__WORKERS: "1"
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:${AIRFLOW_DB_PASSWORD}@postgres:5432/airflow
+      BIKES_DATABASE_URL: postgresql+psycopg://bikes:${BIKES_DB_PASSWORD}@postgres:5432/bikes
+      PYTHONPATH: /opt/project
+      DATA_DIR: /opt/project/data/raw
+      RESULTS_DIR: /opt/project/results
+      WINDOW_START: ${WINDOW_START:-2023-01-01}
+    volumes:
+      - ./dags:/opt/airflow/dags:ro
+      - ./ingest:/opt/project/ingest:ro
+      - ./results:/opt/project/results
+      - ./data:/opt/project/data
+    ports:
+      - "127.0.0.1:8180:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    mem_limit: 1536m
+    logging: *logging
+
+  mlflow:
+    build:
+      context: .
+      dockerfile: docker/mlflow.Dockerfile
+    image: paris-bike-forecast/mlflow:3.17.2
+    command: >
+      mlflow server
+      --backend-store-uri postgresql://mlflow:${MLFLOW_DB_PASSWORD}@postgres:5432/mlflow
+      --artifacts-destination /mlartifacts
+      --host 0.0.0.0 --port 5000 --workers 1
+    volumes:
+      - mlartifacts:/mlartifacts
+    ports:
+      - "127.0.0.1:5050:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    mem_limit: 512m
+    logging: *logging
+
+  grafana:
+    image: grafana/grafana-oss:13.0.2
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GRAFANA_DB_PASSWORD: ${GRAFANA_DB_PASSWORD}
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana:/var/lib/grafana
+    ports:
+      - "127.0.0.1:3100:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    mem_limit: 256m
+    logging: *logging
+
+volumes:
+  pgdata:
+  mlartifacts:
+  grafana:
