@@ -1,0 +1,186 @@
+{
+  "uid": "bikes-data-quality",
+  "title": "Data quality",
+  "schemaVersion": 41,
+  "version": 1,
+  "time": {
+    "from": "now-1y",
+    "to": "now"
+  },
+  "refresh": "5m",
+  "tags": [
+    "bikes"
+  ],
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Counters kept / excluded by the gap rule",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 8,
+        "h": 5
+      },
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "bikes-pg"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "bikes-pg"
+          },
+          "rawQuery": true,
+          "editorMode": "code",
+          "format": "table",
+          "rawSql": "SELECT count(*) FILTER (WHERE NOT excluded) AS kept, count(*) FILTER (WHERE excluded) AS excluded FROM gap_report"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "table",
+      "title": "Latest validation per suite",
+      "gridPos": {
+        "x": 8,
+        "y": 0,
+        "w": 16,
+        "h": 5
+      },
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "bikes-pg"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "bikes-pg"
+          },
+          "rawQuery": true,
+          "editorMode": "code",
+          "format": "table",
+          "rawSql": "SELECT DISTINCT ON (suite) suite, batch, run_at, success, rows, evaluated, failed FROM dq_results ORDER BY suite, run_at DESC"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "timeseries",
+      "title": "Rows and active counters per day",
+      "gridPos": {
+        "x": 0,
+        "y": 5,
+        "w": 24,
+        "h": 8
+      },
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "bikes-pg"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "bikes-pg"
+          },
+          "rawQuery": true,
+          "editorMode": "code",
+          "format": "time_series",
+          "rawSql": "SELECT date_trunc('day', ts) AS time, count(*) / 24.0 AS counter_days, count(DISTINCT counter_id) AS counters FROM counts_hourly WHERE $__timeFilter(ts) GROUP BY 1 ORDER BY 1"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "bargauge",
+      "title": "Missing hours per counter (%), worst 30",
+      "gridPos": {
+        "x": 0,
+        "y": 13,
+        "w": 12,
+        "h": 14
+      },
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "bikes-pg"
+      },
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "basic",
+        "reduceOptions": {
+          "values": true,
+          "calcs": [],
+          "fields": "/^missing_pct$/"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 10
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "bikes-pg"
+          },
+          "rawQuery": true,
+          "editorMode": "code",
+          "format": "table",
+          "rawSql": "SELECT counter_id, round((missing_share * 100)::numeric, 1) AS missing_pct FROM gap_report ORDER BY missing_share DESC LIMIT 30"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "table",
+      "title": "Validation history",
+      "gridPos": {
+        "x": 12,
+        "y": 13,
+        "w": 12,
+        "h": 14
+      },
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "bikes-pg"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "bikes-pg"
+          },
+          "rawQuery": true,
+          "editorMode": "code",
+          "format": "table",
+          "rawSql": "SELECT run_at, suite, batch, success, rows, failed, failures::text AS failures FROM dq_results ORDER BY run_at DESC LIMIT 100"
+        }
+      ]
+    }
+  ]
+}
