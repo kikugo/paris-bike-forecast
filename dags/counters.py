@@ -39,7 +39,7 @@ def counters_backfill():
     def load_live_full() -> int:
         from ingest import db, pipeline
 
-        return pipeline.load_live(db.get_engine(), since=None)
+        return pipeline.load_live_full(db.get_engine())
 
     @task
     def gap_report() -> dict:

@@ -84,17 +84,27 @@ def _upsert_counters(engine: Engine, meta: pd.DataFrame) -> None:
     db.upsert(engine, schema.counters, meta, ["counter_id"])
 
 
-def load_live(engine: Engine, since: date | None) -> int:
-    """Counts from the live dataset since `since` (all 13 months when None)."""
+def load_live(engine: Engine, since: date, until: date | None = None) -> int:
+    """Counts from the live dataset in [since, until)."""
     with _client() as client:
-        raw = paris_counters.live_export(client, since)
+        raw = paris_counters.live_export(client, since, until)
     counts, meta = paris_counters.split(raw, config.WINDOW_START)
-    label = f"live since {since}" if since else "live full"
+    label = f"live {since} to {until or 'now'}"
     _checked(engine, "counts_hourly", counts, label)
     db.upsert(engine, schema.counts_hourly, counts, ["counter_id", "ts"])
     _upsert_counters(engine, meta)
-    db.log_ingest(engine, "counters_live", str(since) if since else "full", len(counts))
+    db.log_ingest(engine, "counters_live", label, len(counts))
     return len(counts)
+
+
+def load_live_full(engine: Engine) -> int:
+    """All 13 months of the live dataset, one month per request to keep memory flat."""
+    first = (date.today() - timedelta(days=400)).replace(day=1)
+    total = 0
+    for start in pd.date_range(first, date.today(), freq="MS").date:
+        end = (pd.Timestamp(start) + pd.offsets.MonthBegin(1)).date()
+        total += load_live(engine, start, end)
+    return total
 
 
 def load_recent_counts(engine: Engine, days: int = config.RECENT_DAYS) -> int:

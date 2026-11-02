@@ -123,15 +123,22 @@ def read_history_zip(path: Path, chunksize: int = 200_000) -> Iterator[pd.DataFr
             yield from read_history_csv(raw, chunksize)
 
 
-def live_export(client: httpx.Client, since: date | None = None) -> pd.DataFrame:
-    """Hourly counts from the live dataset, optionally from `since` (UTC date) onwards."""
+def live_export(
+    client: httpx.Client, since: date | None = None, until: date | None = None
+) -> pd.DataFrame:
+    """Hourly counts from the live dataset in [since, until) (UTC dates; open ends allowed)."""
     params = {
         "select": "id_compteur,nom_compteur,id,name,sum_counts,date,installation_date,coordinates",
         "timezone": "UTC",
         "delimiter": ";",
     }
+    where = []
     if since is not None:
-        params["where"] = f"date >= date'{since.isoformat()}'"
+        where.append(f"date >= date'{since.isoformat()}'")
+    if until is not None:
+        where.append(f"date < date'{until.isoformat()}'")
+    if where:
+        params["where"] = " and ".join(where)
     resp = client.get(f"{API}/{LIVE_DATASET}/exports/csv", params=params)
     resp.raise_for_status()
     return parse_live_csv(resp.content)
