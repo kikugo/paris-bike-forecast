@@ -39,7 +39,7 @@ counter-hour, timestamps on the hour, weather values in physical ranges. Results
 | [Open-Meteo historical weather API](https://open-meteo.com/en/licence) | CC BY 4.0 | 1940-01-01 to yesterday |  |
 | [Jours fériés, metropolitan France (calendrier.api.gouv.fr)](https://www.data.gouv.fr/datasets/jours-feries-en-france) | Licence Ouverte / Open Licence version 2.0 | 2006-01-01 to 2031-12-25 |  |
 
-Checked 2026-11-02 by `ingest/sources_report.py`. This project ingests from 2023-01-01 onwards.
+Checked 2026-11-03 by `ingest/sources_report.py`. This project ingests from 2024-01-01 onwards.
 <!-- DATA:END -->
 
 Weather data by [Open-Meteo.com](https://open-meteo.com/). Bike counter data © Ville de Paris,
@@ -48,6 +48,11 @@ under the ODbL.
 ### Counters kept after the gap rule
 
 <!-- GAPS:START -->
+| Window | Hours | Counters | Kept | Excluded |
+| --- | --- | --- | --- | --- |
+| 2024-01-01 to 2026-11-01 | 24,863 | 187 | 95 | 92 |
+
+A counter is excluded when more than 10% of its hours are missing (no row, or inside a run of at least 24 zero hours).
 <!-- GAPS:END -->
 
 Counters break and get replaced, so a long run of zeros is treated as missing data rather than
