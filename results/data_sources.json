@@ -1,0 +1,39 @@
+{
+  "checked_at": "2026-11-03T01:21:20+00:00",
+  "window_start": "2024-01-01",
+  "sources": {
+    "counters_live": {
+      "name": "Comptage vélo - Données compteurs (13 rolling months)",
+      "licence": "Open Database License (ODbL)",
+      "page": "https://opendata.paris.fr/explore/dataset/comptage-velo-donnees-compteurs/information/",
+      "modified": "2026-11-02T07:47:58+00:00",
+      "first": "2025-10-02",
+      "last": "2026-11-01",
+      "counters": 113,
+      "rows": 1036713
+    },
+    "counters_history": {
+      "name": "Comptage vélo - Historique (yearly files)",
+      "licence": "Open Database License (ODbL)",
+      "page": "https://opendata.paris.fr/explore/dataset/comptage-velo-historique-donnees-compteurs/information/",
+      "modified": "2026-02-20T11:23:51+00:00",
+      "first": "2016-01-01",
+      "last": "2025-12-31",
+      "files": 10
+    },
+    "weather": {
+      "name": "Open-Meteo historical weather API",
+      "licence": "CC BY 4.0",
+      "page": "https://open-meteo.com/en/licence",
+      "first": "1940-01-01",
+      "last": "yesterday"
+    },
+    "holidays": {
+      "name": "Jours fériés, metropolitan France (calendrier.api.gouv.fr)",
+      "licence": "Licence Ouverte / Open Licence version 2.0",
+      "page": "https://www.data.gouv.fr/datasets/jours-feries-en-france",
+      "first": "2006-01-01",
+      "last": "2031-12-25"
+    }
+  }
+}

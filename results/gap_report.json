@@ -1,0 +1,1323 @@
+{
+  "window_start": "2024-01-01T00:00:00+00:00",
+  "window_end": "2026-11-01T22:00:00+00:00",
+  "rule": {
+    "zero_run_hours": 24,
+    "max_missing_share": 0.1
+  },
+  "counters_total": 187,
+  "counters_kept": 95,
+  "counters_excluded": 92,
+  "hours_in_window": 24863,
+  "counters": [
+    {
+      "counter_id": "100047533-101047533",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100047539-101047539",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100047544-101047544",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100047546-103047546",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100047546-104047546",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100047547-103047547",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100047547-104047547",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100047549-101047549",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100047551-101047551",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100049408-101049408",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056034-101056034",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056039-101056039",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056046-101056046",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056226-104056226",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056327-103056327",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056327-104056327",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056329-103056329",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056329-104056329",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056330-103056330",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056330-104056330",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056331-104056331",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056332-103056332",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056332-104056332",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "300030120-353354985",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "300030121-353354988",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "300030139-353355137",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "300030160-353355230",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "300030163-353355237",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "300030173-353355291",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "300030173-353355292",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "300030271-353356061",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "300030922-353361114",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "300030926-353361125",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "300030960-353361420",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "300030967-353361487",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "300030996-353361762",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "300030997-353361763",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "300030997-353361764",
+      "missing_share": 0.004143,
+      "absent_hours": 103,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100047536-101047536",
+      "missing_share": 0.004183,
+      "absent_hours": 104,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056331-103056331",
+      "missing_share": 0.004223,
+      "absent_hours": 103,
+      "zero_run_hours": 2,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056226-103056226",
+      "missing_share": 0.004424,
+      "absent_hours": 103,
+      "zero_run_hours": 7,
+      "excluded": false
+    },
+    {
+      "counter_id": "100044493-101044493",
+      "missing_share": 0.004545,
+      "absent_hours": 113,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056032-101056032",
+      "missing_share": 0.005108,
+      "absent_hours": 127,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056044-101056044",
+      "missing_share": 0.005108,
+      "absent_hours": 127,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100036719-103036719",
+      "missing_share": 0.005148,
+      "absent_hours": 103,
+      "zero_run_hours": 25,
+      "excluded": false
+    },
+    {
+      "counter_id": "100036719-104036719",
+      "missing_share": 0.00543,
+      "absent_hours": 111,
+      "zero_run_hours": 24,
+      "excluded": false
+    },
+    {
+      "counter_id": "300030219-353355786",
+      "missing_share": 0.005671,
+      "absent_hours": 141,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "300030219-353355787",
+      "missing_share": 0.005671,
+      "absent_hours": 141,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "300030250-353355931",
+      "missing_share": 0.005872,
+      "absent_hours": 146,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "300030250-353355932",
+      "missing_share": 0.005872,
+      "absent_hours": 146,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "300030279-353356112",
+      "missing_share": 0.006797,
+      "absent_hours": 169,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056045-101056045",
+      "missing_share": 0.006958,
+      "absent_hours": 147,
+      "zero_run_hours": 26,
+      "excluded": false
+    },
+    {
+      "counter_id": "100050132-101050132",
+      "missing_share": 0.006998,
+      "absent_hours": 103,
+      "zero_run_hours": 71,
+      "excluded": false
+    },
+    {
+      "counter_id": "300030172-353355277",
+      "missing_share": 0.007602,
+      "absent_hours": 189,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "300030172-353355278",
+      "missing_share": 0.007642,
+      "absent_hours": 189,
+      "zero_run_hours": 1,
+      "excluded": false
+    },
+    {
+      "counter_id": "100047550-101047550",
+      "missing_share": 0.007722,
+      "absent_hours": 104,
+      "zero_run_hours": 88,
+      "excluded": false
+    },
+    {
+      "counter_id": "300037174-353406822",
+      "missing_share": 0.008848,
+      "absent_hours": 103,
+      "zero_run_hours": 117,
+      "excluded": false
+    },
+    {
+      "counter_id": "300037174-353406823",
+      "missing_share": 0.008969,
+      "absent_hours": 103,
+      "zero_run_hours": 120,
+      "excluded": false
+    },
+    {
+      "counter_id": "300030871-353360668",
+      "missing_share": 0.012106,
+      "absent_hours": 299,
+      "zero_run_hours": 2,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056334-104056334",
+      "missing_share": 0.012227,
+      "absent_hours": 122,
+      "zero_run_hours": 182,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056042-101056042",
+      "missing_share": 0.012267,
+      "absent_hours": 103,
+      "zero_run_hours": 202,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056334-103056334",
+      "missing_share": 0.012267,
+      "absent_hours": 122,
+      "zero_run_hours": 183,
+      "excluded": false
+    },
+    {
+      "counter_id": "100047535-101047535",
+      "missing_share": 0.012509,
+      "absent_hours": 311,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100057329-104057329",
+      "missing_share": 0.013112,
+      "absent_hours": 325,
+      "zero_run_hours": 1,
+      "excluded": false
+    },
+    {
+      "counter_id": "100057329-103057329",
+      "missing_share": 0.013192,
+      "absent_hours": 322,
+      "zero_run_hours": 6,
+      "excluded": false
+    },
+    {
+      "counter_id": "100050876-104050876",
+      "missing_share": 0.013474,
+      "absent_hours": 335,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100050876-103050876",
+      "missing_share": 0.013675,
+      "absent_hours": 340,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100047534-101047534",
+      "missing_share": 0.015163,
+      "absent_hours": 377,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056040-101056040",
+      "missing_share": 0.016209,
+      "absent_hours": 403,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056335-103056335",
+      "missing_share": 0.017496,
+      "absent_hours": 406,
+      "zero_run_hours": 29,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056335-104056335",
+      "missing_share": 0.017536,
+      "absent_hours": 410,
+      "zero_run_hours": 26,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056041-101056041",
+      "missing_share": 0.017858,
+      "absent_hours": 443,
+      "zero_run_hours": 1,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056035-353266462",
+      "missing_share": 0.01826,
+      "absent_hours": 454,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056035-353266460",
+      "missing_share": 0.0183,
+      "absent_hours": 454,
+      "zero_run_hours": 1,
+      "excluded": false
+    },
+    {
+      "counter_id": "300030838-353360366",
+      "missing_share": 0.018461,
+      "absent_hours": 103,
+      "zero_run_hours": 356,
+      "excluded": false
+    },
+    {
+      "counter_id": "300030838-353360367",
+      "missing_share": 0.018542,
+      "absent_hours": 103,
+      "zero_run_hours": 358,
+      "excluded": false
+    },
+    {
+      "counter_id": "100006300-101006300",
+      "missing_share": 0.019306,
+      "absent_hours": 103,
+      "zero_run_hours": 377,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056336-103056336",
+      "missing_share": 0.019426,
+      "absent_hours": 483,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100057445-103057445",
+      "missing_share": 0.019628,
+      "absent_hours": 488,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100044506-101044506",
+      "missing_share": 0.019869,
+      "absent_hours": 353,
+      "zero_run_hours": 141,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056336-104056336",
+      "missing_share": 0.020874,
+      "absent_hours": 483,
+      "zero_run_hours": 36,
+      "excluded": false
+    },
+    {
+      "counter_id": "100044495-101044495",
+      "missing_share": 0.02373,
+      "absent_hours": 241,
+      "zero_run_hours": 349,
+      "excluded": false
+    },
+    {
+      "counter_id": "100047538-101047538",
+      "missing_share": 0.025258,
+      "absent_hours": 103,
+      "zero_run_hours": 525,
+      "excluded": false
+    },
+    {
+      "counter_id": "100047540-101047540",
+      "missing_share": 0.025862,
+      "absent_hours": 108,
+      "zero_run_hours": 535,
+      "excluded": false
+    },
+    {
+      "counter_id": "100057445-104057445",
+      "missing_share": 0.026545,
+      "absent_hours": 660,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100047542-103047542",
+      "missing_share": 0.026666,
+      "absent_hours": 332,
+      "zero_run_hours": 331,
+      "excluded": false
+    },
+    {
+      "counter_id": "100047542-104047542",
+      "missing_share": 0.02912,
+      "absent_hours": 570,
+      "zero_run_hours": 154,
+      "excluded": false
+    },
+    {
+      "counter_id": "100003096-353242251",
+      "missing_share": 0.02916,
+      "absent_hours": 116,
+      "zero_run_hours": 609,
+      "excluded": false
+    },
+    {
+      "counter_id": "100007049-101007049",
+      "missing_share": 0.029321,
+      "absent_hours": 729,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100007049-102007049",
+      "missing_share": 0.029562,
+      "absent_hours": 731,
+      "zero_run_hours": 4,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056223-101056223",
+      "missing_share": 0.030206,
+      "absent_hours": 448,
+      "zero_run_hours": 303,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056047-101056047",
+      "missing_share": 0.034952,
+      "absent_hours": 381,
+      "zero_run_hours": 488,
+      "excluded": false
+    },
+    {
+      "counter_id": "100041488-101041488",
+      "missing_share": 0.036681,
+      "absent_hours": 872,
+      "zero_run_hours": 40,
+      "excluded": false
+    },
+    {
+      "counter_id": "300030908-353360976",
+      "missing_share": 0.054901,
+      "absent_hours": 1365,
+      "zero_run_hours": 0,
+      "excluded": false
+    },
+    {
+      "counter_id": "100056038-101056038",
+      "missing_share": 0.099907,
+      "absent_hours": 2390,
+      "zero_run_hours": 94,
+      "excluded": false
+    },
+    {
+      "counter_id": "100036718-103036718",
+      "missing_share": 0.116036,
+      "absent_hours": 2885,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100036718-104036718",
+      "missing_share": 0.116036,
+      "absent_hours": 2885,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100057380-104057380",
+      "missing_share": 0.195914,
+      "absent_hours": 266,
+      "zero_run_hours": 4605,
+      "excluded": true
+    },
+    {
+      "counter_id": "100057380-103057380",
+      "missing_share": 0.199212,
+      "absent_hours": 203,
+      "zero_run_hours": 4750,
+      "excluded": true
+    },
+    {
+      "counter_id": "300030921-353361113",
+      "missing_share": 0.234043,
+      "absent_hours": 127,
+      "zero_run_hours": 5692,
+      "excluded": true
+    },
+    {
+      "counter_id": "100047545-104047545",
+      "missing_share": 0.253871,
+      "absent_hours": 6312,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100047545-103047545",
+      "missing_share": 0.253911,
+      "absent_hours": 6312,
+      "zero_run_hours": 1,
+      "excluded": true
+    },
+    {
+      "counter_id": "100036718-101036718",
+      "missing_share": 0.294494,
+      "absent_hours": 7322,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100036718-102036718",
+      "missing_share": 0.294494,
+      "absent_hours": 7322,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100036719-101036719",
+      "missing_share": 0.294494,
+      "absent_hours": 7322,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100042374-101042374",
+      "missing_share": 0.294494,
+      "absent_hours": 7322,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100042374-102042374",
+      "missing_share": 0.294494,
+      "absent_hours": 7322,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100047541-101047541",
+      "missing_share": 0.294494,
+      "absent_hours": 7322,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100047546-102047546",
+      "missing_share": 0.294494,
+      "absent_hours": 7322,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100047547-102047547",
+      "missing_share": 0.294494,
+      "absent_hours": 7322,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100047548-101047548",
+      "missing_share": 0.294494,
+      "absent_hours": 7322,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100047548-102047548",
+      "missing_share": 0.294494,
+      "absent_hours": 7322,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100056327-101056327",
+      "missing_share": 0.294494,
+      "absent_hours": 7322,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100056327-102056327",
+      "missing_share": 0.294494,
+      "absent_hours": 7322,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100056329-102056329",
+      "missing_share": 0.294494,
+      "absent_hours": 7322,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100056331-101056331",
+      "missing_share": 0.294494,
+      "absent_hours": 7322,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100056331-102056331",
+      "missing_share": 0.294494,
+      "absent_hours": 7322,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100056332-101056332",
+      "missing_share": 0.294494,
+      "absent_hours": 7322,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100056336-101056336",
+      "missing_share": 0.294494,
+      "absent_hours": 7322,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "300030172-353355275",
+      "missing_share": 0.294494,
+      "absent_hours": 7322,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "300030172-353355276",
+      "missing_share": 0.294494,
+      "absent_hours": 7322,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "300030173-353355289",
+      "missing_share": 0.294494,
+      "absent_hours": 7322,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "300030173-353355290",
+      "missing_share": 0.294494,
+      "absent_hours": 7322,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "300030219-353355785",
+      "missing_share": 0.294494,
+      "absent_hours": 7322,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "300030250-353355929",
+      "missing_share": 0.294494,
+      "absent_hours": 7322,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "300030250-353355930",
+      "missing_share": 0.294494,
+      "absent_hours": 7322,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "300030838-353360364",
+      "missing_share": 0.294494,
+      "absent_hours": 7322,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100047546-101047546",
+      "missing_share": 0.294534,
+      "absent_hours": 7322,
+      "zero_run_hours": 1,
+      "excluded": true
+    },
+    {
+      "counter_id": "100047547-101047547",
+      "missing_share": 0.294534,
+      "absent_hours": 7322,
+      "zero_run_hours": 1,
+      "excluded": true
+    },
+    {
+      "counter_id": "100056226-101056226",
+      "missing_share": 0.294534,
+      "absent_hours": 7322,
+      "zero_run_hours": 1,
+      "excluded": true
+    },
+    {
+      "counter_id": "100056329-101056329",
+      "missing_share": 0.294534,
+      "absent_hours": 7322,
+      "zero_run_hours": 1,
+      "excluded": true
+    },
+    {
+      "counter_id": "100056332-102056332",
+      "missing_share": 0.294534,
+      "absent_hours": 7322,
+      "zero_run_hours": 1,
+      "excluded": true
+    },
+    {
+      "counter_id": "100056226-102056226",
+      "missing_share": 0.294614,
+      "absent_hours": 7322,
+      "zero_run_hours": 3,
+      "excluded": true
+    },
+    {
+      "counter_id": "300030219-353355784",
+      "missing_share": 0.294655,
+      "absent_hours": 7322,
+      "zero_run_hours": 4,
+      "excluded": true
+    },
+    {
+      "counter_id": "100003096-101003096",
+      "missing_share": 0.295017,
+      "absent_hours": 7335,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100056330-101056330",
+      "missing_share": 0.29562,
+      "absent_hours": 7322,
+      "zero_run_hours": 28,
+      "excluded": true
+    },
+    {
+      "counter_id": "100056330-102056330",
+      "missing_share": 0.29562,
+      "absent_hours": 7322,
+      "zero_run_hours": 28,
+      "excluded": true
+    },
+    {
+      "counter_id": "300030838-353360365",
+      "missing_share": 0.295741,
+      "absent_hours": 7322,
+      "zero_run_hours": 31,
+      "excluded": true
+    },
+    {
+      "counter_id": "100056336-102056336",
+      "missing_share": 0.295781,
+      "absent_hours": 7322,
+      "zero_run_hours": 32,
+      "excluded": true
+    },
+    {
+      "counter_id": "100036719-102036719",
+      "missing_share": 0.295821,
+      "absent_hours": 7322,
+      "zero_run_hours": 33,
+      "excluded": true
+    },
+    {
+      "counter_id": "100049407-101049407",
+      "missing_share": 0.296223,
+      "absent_hours": 7345,
+      "zero_run_hours": 20,
+      "excluded": true
+    },
+    {
+      "counter_id": "100049407-102049407",
+      "missing_share": 0.296223,
+      "absent_hours": 7345,
+      "zero_run_hours": 20,
+      "excluded": true
+    },
+    {
+      "counter_id": "300037174-353406824",
+      "missing_share": 0.2992,
+      "absent_hours": 7322,
+      "zero_run_hours": 117,
+      "excluded": true
+    },
+    {
+      "counter_id": "300037174-353406825",
+      "missing_share": 0.29928,
+      "absent_hours": 7322,
+      "zero_run_hours": 119,
+      "excluded": true
+    },
+    {
+      "counter_id": "100047545-101047545",
+      "missing_share": 0.302136,
+      "absent_hours": 7512,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100047545-102047545",
+      "missing_share": 0.302136,
+      "absent_hours": 7512,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100057329-101057329",
+      "missing_share": 0.302176,
+      "absent_hours": 7365,
+      "zero_run_hours": 148,
+      "excluded": true
+    },
+    {
+      "counter_id": "100057329-102057329",
+      "missing_share": 0.302498,
+      "absent_hours": 7511,
+      "zero_run_hours": 10,
+      "excluded": true
+    },
+    {
+      "counter_id": "100056334-101056334",
+      "missing_share": 0.302578,
+      "absent_hours": 7341,
+      "zero_run_hours": 182,
+      "excluded": true
+    },
+    {
+      "counter_id": "100056334-102056334",
+      "missing_share": 0.302578,
+      "absent_hours": 7341,
+      "zero_run_hours": 182,
+      "excluded": true
+    },
+    {
+      "counter_id": "100050876-101050876",
+      "missing_share": 0.303785,
+      "absent_hours": 7449,
+      "zero_run_hours": 104,
+      "excluded": true
+    },
+    {
+      "counter_id": "100050876-102050876",
+      "missing_share": 0.305273,
+      "absent_hours": 7590,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100056335-102056335",
+      "missing_share": 0.307887,
+      "absent_hours": 7647,
+      "zero_run_hours": 8,
+      "excluded": true
+    },
+    {
+      "counter_id": "100056335-101056335",
+      "missing_share": 0.307927,
+      "absent_hours": 7625,
+      "zero_run_hours": 31,
+      "excluded": true
+    },
+    {
+      "counter_id": "100057445-101057445",
+      "missing_share": 0.309979,
+      "absent_hours": 7322,
+      "zero_run_hours": 385,
+      "excluded": true
+    },
+    {
+      "counter_id": "100057445-102057445",
+      "missing_share": 0.309979,
+      "absent_hours": 7695,
+      "zero_run_hours": 12,
+      "excluded": true
+    },
+    {
+      "counter_id": "100047542-102047542",
+      "missing_share": 0.315046,
+      "absent_hours": 7557,
+      "zero_run_hours": 276,
+      "excluded": true
+    },
+    {
+      "counter_id": "100047542-101047542",
+      "missing_share": 0.317138,
+      "absent_hours": 7667,
+      "zero_run_hours": 218,
+      "excluded": true
+    },
+    {
+      "counter_id": "300030826-353504976",
+      "missing_share": 0.363552,
+      "absent_hours": 9039,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100044494-353504987",
+      "missing_share": 0.363673,
+      "absent_hours": 9041,
+      "zero_run_hours": 1,
+      "excluded": true
+    },
+    {
+      "counter_id": "100057380-102057380",
+      "missing_share": 0.379801,
+      "absent_hours": 7420,
+      "zero_run_hours": 2023,
+      "excluded": true
+    },
+    {
+      "counter_id": "100057380-101057380",
+      "missing_share": 0.388046,
+      "absent_hours": 7322,
+      "zero_run_hours": 2326,
+      "excluded": true
+    },
+    {
+      "counter_id": "300042293-353449678",
+      "missing_share": 0.437719,
+      "absent_hours": 10883,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "300042305-353449802",
+      "missing_share": 0.437839,
+      "absent_hours": 10886,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "300042350-353450161",
+      "missing_share": 0.438644,
+      "absent_hours": 10906,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "300042385-353450364",
+      "missing_share": 0.438925,
+      "absent_hours": 10913,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "300042385-353450365",
+      "missing_share": 0.438925,
+      "absent_hours": 10913,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "300042267-353449459",
+      "missing_share": 0.438966,
+      "absent_hours": 10888,
+      "zero_run_hours": 26,
+      "excluded": true
+    },
+    {
+      "counter_id": "300042287-353449656",
+      "missing_share": 0.443913,
+      "absent_hours": 10881,
+      "zero_run_hours": 156,
+      "excluded": true
+    },
+    {
+      "counter_id": "300030116-353354957",
+      "missing_share": 0.522986,
+      "absent_hours": 103,
+      "zero_run_hours": 12900,
+      "excluded": true
+    },
+    {
+      "counter_id": "100047548-103047548",
+      "missing_share": 0.622813,
+      "absent_hours": 15485,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100042374-109042374",
+      "missing_share": 0.622853,
+      "absent_hours": 15486,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100042374-110042374",
+      "missing_share": 0.622853,
+      "absent_hours": 15486,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100047541-353326452",
+      "missing_share": 0.622853,
+      "absent_hours": 15486,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100047548-104047548",
+      "missing_share": 0.622853,
+      "absent_hours": 15486,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100049407-353255859",
+      "missing_share": 0.628645,
+      "absent_hours": 15630,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "100049407-353255860",
+      "missing_share": 0.628685,
+      "absent_hours": 15630,
+      "zero_run_hours": 1,
+      "excluded": true
+    },
+    {
+      "counter_id": "300030826-353360275",
+      "missing_share": 0.70619,
+      "absent_hours": 17558,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "300042802-353453880",
+      "missing_share": 0.804649,
+      "absent_hours": 20006,
+      "zero_run_hours": 0,
+      "excluded": true
+    },
+    {
+      "counter_id": "300042803-353453881",
+      "missing_share": 0.951937,
+      "absent_hours": 20007,
+      "zero_run_hours": 3661,
+      "excluded": true
+    },
+    {
+      "counter_id": "300042795-353453861",
+      "missing_share": 0.977356,
+      "absent_hours": 20005,
+      "zero_run_hours": 4295,
+      "excluded": true
+    },
+    {
+      "counter_id": "300042795-353453862",
+      "missing_share": 0.982303,
+      "absent_hours": 20005,
+      "zero_run_hours": 4418,
+      "excluded": true
+    },
+    {
+      "counter_id": "100003098-101003098",
+      "missing_share": 0.987331,
+      "absent_hours": 1961,
+      "zero_run_hours": 22587,
+      "excluded": true
+    },
+    {
+      "counter_id": "300042791-353453832",
+      "missing_share": 0.995174,
+      "absent_hours": 20003,
+      "zero_run_hours": 4740,
+      "excluded": true
+    },
+    {
+      "counter_id": "300042791-353453830",
+      "missing_share": 0.995294,
+      "absent_hours": 20003,
+      "zero_run_hours": 4743,
+      "excluded": true
+    },
+    {
+      "counter_id": "300042791-353453831",
+      "missing_share": 0.995294,
+      "absent_hours": 20003,
+      "zero_run_hours": 4743,
+      "excluded": true
+    },
+    {
+      "counter_id": "300042791-353453833",
+      "missing_share": 0.995294,
+      "absent_hours": 20003,
+      "zero_run_hours": 4743,
+      "excluded": true
+    }
+  ]
+}

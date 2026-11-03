@@ -1,0 +1,15 @@
+apiVersion: 1
+datasources:
+  - name: bikes
+    uid: bikes-pg
+    type: grafana-postgresql-datasource
+    url: postgres:5432
+    user: grafana_ro
+    isDefault: true
+    jsonData:
+      database: bikes
+      sslmode: disable
+      postgresVersion: 1700
+      timescaledb: false
+    secureJsonData:
+      password: $GRAFANA_DB_PASSWORD
