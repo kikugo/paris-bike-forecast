@@ -4,7 +4,7 @@ import pandas as pd
 import pytest
 from sqlalchemy import select
 
-from ingest import db, gaps, schema
+from ingest import config, db, gaps, schema
 
 
 @pytest.fixture
@@ -58,13 +58,16 @@ def test_ingest_log(engine):
 
 
 def test_gap_refresh_end_to_end(engine, tmp_path, monkeypatch):
-    start = pd.Timestamp("2023-01-01T00:00Z")
+    monkeypatch.setattr(config, "WINDOW_START", pd.Timestamp("2024-01-01").date())
+    start = pd.Timestamp("2024-01-01T00:00Z")
     hours = pd.date_range(start, periods=200, freq="h", tz="UTC")
     good = pd.DataFrame({"counter_id": "good", "ts": hours, "count": 5})
     # 'dead' reports zeros for 48 hours, so 24% of the window is missing.
     dead = good.assign(counter_id="dead")
     dead.loc[50:97, "count"] = 0
-    db.upsert(engine, schema.counts_hourly, pd.concat([good, dead]), ["counter_id", "ts"])
+    # 'retired' only has data before the window and is left out of the report.
+    retired = pd.DataFrame({"counter_id": "retired", "ts": hours - pd.Timedelta(days=30), "count": 5})
+    db.upsert(engine, schema.counts_hourly, pd.concat([good, dead, retired]), ["counter_id", "ts"])
 
     summary = gaps.refresh(engine, results_dir=str(tmp_path))
 

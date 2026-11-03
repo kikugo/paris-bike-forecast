@@ -47,7 +47,7 @@ services:
       PYTHONPATH: /opt/project
       DATA_DIR: /opt/project/data/raw
       RESULTS_DIR: /opt/project/results
-      WINDOW_START: ${WINDOW_START:-2023-01-01}
+      WINDOW_START: ${WINDOW_START:-2024-01-01}
     volumes:
       - ./dags:/opt/airflow/dags:ro
       - ./ingest:/opt/project/ingest:ro

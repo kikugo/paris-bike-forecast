@@ -3,7 +3,7 @@
 import os
 from datetime import date
 
-WINDOW_START = date.fromisoformat(os.getenv("WINDOW_START", "2023-01-01"))
+WINDOW_START = date.fromisoformat(os.getenv("WINDOW_START", "2024-01-01"))
 
 # One weather point for the whole city: every counter sits within ~10 km of it,
 # which is smaller than the weather model grid.

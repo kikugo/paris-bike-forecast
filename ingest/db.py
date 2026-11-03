@@ -20,7 +20,11 @@ def init_db(engine: Engine) -> None:
     schema.metadata.create_all(engine)
     if engine.dialect.name == "postgresql":
         with engine.begin() as conn:
-            conn.execute(schema.COUNTS_CLEAN_VIEW)
+            # DDL takes no bind parameters, so the window start is inlined as a date literal.
+            sql = schema.COUNTS_CLEAN_VIEW.replace(
+                ":window_start", f"'{config.WINDOW_START.isoformat()}'::timestamptz"
+            )
+            conn.execute(text(sql))
 
 
 def _records(df: pd.DataFrame) -> list[dict]:

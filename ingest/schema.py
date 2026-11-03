@@ -12,7 +12,6 @@ from sqlalchemy import (
     MetaData,
     String,
     Table,
-    text,
 )
 
 metadata = MetaData()
@@ -105,9 +104,8 @@ zero_runs = Table(
     Column("hours", Integer, nullable=False),
 )
 
-# Counts from kept counters only, with hours inside long zero runs set to NULL.
-COUNTS_CLEAN_VIEW = text(
-    """
+# Counts from kept counters inside the window, with hours inside long zero runs set to NULL.
+COUNTS_CLEAN_VIEW = """
     CREATE OR REPLACE VIEW counts_clean AS
     SELECT c.counter_id, c.ts,
            CASE WHEN z.counter_id IS NULL THEN c.count END AS count
@@ -115,5 +113,5 @@ COUNTS_CLEAN_VIEW = text(
     JOIN gap_report g ON g.counter_id = c.counter_id AND NOT g.excluded
     LEFT JOIN zero_runs z
       ON z.counter_id = c.counter_id AND c.ts BETWEEN z.start_ts AND z.end_ts
-    """
-)
+    WHERE c.ts >= :window_start
+"""

@@ -93,7 +93,10 @@ def refresh(engine: Engine, results_dir: str = config.RESULTS_DIR) -> dict:
     start = pd.Timestamp(config.WINDOW_START, tz="UTC")
     with engine.connect() as conn:
         end = conn.execute(select(func.max(c.c.ts))).scalar()
-        ids = conn.execute(select(c.c.counter_id).distinct().order_by(c.c.counter_id)).scalars().all()
+        # Counters retired before the window start are not part of the report.
+        ids = conn.execute(
+            select(c.c.counter_id).where(c.c.ts >= start).distinct().order_by(c.c.counter_id)
+        ).scalars().all()
     if end is None:
         raise RuntimeError("counts_hourly is empty")
     end = pd.Timestamp(end).tz_convert("UTC") if pd.Timestamp(end).tzinfo else pd.Timestamp(end, tz="UTC")
