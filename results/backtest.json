@@ -1,0 +1,191 @@
+{
+  "snapshot": {
+    "start": "2024-01-01T00:00:00+00:00",
+    "end": "2026-11-01T22:00:00+00:00",
+    "counters": 95,
+    "rows": 2339111,
+    "rows_with_count": 2333297,
+    "counts_sha256": "620ab6b5c75e35df514ba71948dfe27157006bc661350d6c7d0da86d376489d3"
+  },
+  "horizon_hours": 168,
+  "models": {
+    "seasonal_naive": "Seasonal naive (same hour last week)",
+    "seasonal_naive_4w": "Seasonal naive, 4-week average"
+  },
+  "folds": [
+    {
+      "fold": 1,
+      "cutoff": "2026-08-31T00:00:00",
+      "test_end": "2026-09-06T23:00:00",
+      "counters": 94,
+      "models": {
+        "seasonal_naive": {
+          "mae": 37.0691,
+          "rmse": 67.8042,
+          "smape": 45.3253,
+          "n": 15772
+        },
+        "seasonal_naive_4w": {
+          "mae": 47.1303,
+          "rmse": 84.6959,
+          "smape": 50.573,
+          "n": 15772
+        }
+      }
+    },
+    {
+      "fold": 2,
+      "cutoff": "2026-09-07T00:00:00",
+      "test_end": "2026-09-13T23:00:00",
+      "counters": 95,
+      "models": {
+        "seasonal_naive": {
+          "mae": 16.7254,
+          "rmse": 32.1798,
+          "smape": 27.7047,
+          "n": 15866
+        },
+        "seasonal_naive_4w": {
+          "mae": 41.5171,
+          "rmse": 73.8296,
+          "smape": 43.139,
+          "n": 15866
+        }
+      }
+    },
+    {
+      "fold": 3,
+      "cutoff": "2026-09-14T00:00:00",
+      "test_end": "2026-09-20T23:00:00",
+      "counters": 95,
+      "models": {
+        "seasonal_naive": {
+          "mae": 14.763,
+          "rmse": 25.822,
+          "smape": 25.712,
+          "n": 15921
+        },
+        "seasonal_naive_4w": {
+          "mae": 30.8909,
+          "rmse": 53.9305,
+          "smape": 34.9714,
+          "n": 15921
+        }
+      }
+    },
+    {
+      "fold": 4,
+      "cutoff": "2026-09-21T00:00:00",
+      "test_end": "2026-09-27T23:00:00",
+      "counters": 95,
+      "models": {
+        "seasonal_naive": {
+          "mae": 17.9385,
+          "rmse": 39.3845,
+          "smape": 29.148,
+          "n": 13604
+        },
+        "seasonal_naive_4w": {
+          "mae": 20.2239,
+          "rmse": 39.5538,
+          "smape": 29.575,
+          "n": 13604
+        }
+      }
+    },
+    {
+      "fold": 5,
+      "cutoff": "2026-09-28T00:00:00",
+      "test_end": "2026-10-04T23:00:00",
+      "counters": 95,
+      "models": {
+        "seasonal_naive": {
+          "mae": 22.3716,
+          "rmse": 47.4507,
+          "smape": 31.8863,
+          "n": 13661
+        },
+        "seasonal_naive_4w": {
+          "mae": 17.4526,
+          "rmse": 35.7774,
+          "smape": 25.4772,
+          "n": 13661
+        }
+      }
+    },
+    {
+      "fold": 6,
+      "cutoff": "2026-10-05T00:00:00",
+      "test_end": "2026-10-11T23:00:00",
+      "counters": 95,
+      "models": {
+        "seasonal_naive": {
+          "mae": 20.466,
+          "rmse": 40.1185,
+          "smape": 30.5941,
+          "n": 15806
+        },
+        "seasonal_naive_4w": {
+          "mae": 18.6302,
+          "rmse": 35.9547,
+          "smape": 28.2259,
+          "n": 15806
+        }
+      }
+    },
+    {
+      "fold": 7,
+      "cutoff": "2026-10-12T00:00:00",
+      "test_end": "2026-10-18T23:00:00",
+      "counters": 95,
+      "models": {
+        "seasonal_naive": {
+          "mae": 20.6879,
+          "rmse": 46.0127,
+          "smape": 30.0809,
+          "n": 15890
+        },
+        "seasonal_naive_4w": {
+          "mae": 18.7711,
+          "rmse": 44.1615,
+          "smape": 26.8368,
+          "n": 15890
+        }
+      }
+    },
+    {
+      "fold": 8,
+      "cutoff": "2026-10-19T00:00:00",
+      "test_end": "2026-10-25T23:00:00",
+      "counters": 95,
+      "models": {
+        "seasonal_naive": {
+          "mae": 35.6466,
+          "rmse": 59.5192,
+          "smape": 46.0439,
+          "n": 13312
+        },
+        "seasonal_naive_4w": {
+          "mae": 38.1039,
+          "rmse": 66.2035,
+          "smape": 46.4579,
+          "n": 13312
+        }
+      }
+    }
+  ],
+  "overall": {
+    "seasonal_naive": {
+      "mae": 23.0444,
+      "rmse": 46.3696,
+      "smape": 33.1332,
+      "n": 119832
+    },
+    "seasonal_naive_4w": {
+      "mae": 29.2692,
+      "rmse": 57.3744,
+      "smape": 35.7189,
+      "n": 119832
+    }
+  }
+}
