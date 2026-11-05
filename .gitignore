@@ -23,3 +23,6 @@ airflow/logs/
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# Frozen copy of the clean data the backtest reads
+data/snapshot/

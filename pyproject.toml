@@ -13,7 +13,9 @@ dependencies = [
     "pandas>=3.1.0",
     "psycopg[binary]>=3.3.6",
     "pyarrow>=26.0.0",
+    "python-dotenv>=1.2.4",
     "sqlalchemy>=2.1.6",
+    "statsforecast>=2.0.3",
 ]
 
 [dependency-groups]
