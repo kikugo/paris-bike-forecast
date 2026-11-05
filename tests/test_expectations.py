@@ -62,3 +62,20 @@ def test_weather_rules():
 def test_holidays_duplicate_day_fails():
     df = pd.DataFrame({"day": [pd.Timestamp("2026-01-01").date()] * 2, "name": ["x", "y"]})
     assert not validate("holidays", df).success
+
+
+def test_weather_forecast_rules():
+    df = pd.DataFrame(
+        {
+            "ts": pd.to_datetime(["2026-01-01T00:00Z"] * 2),
+            "lead_day": [1, 2],
+            "temperature_2m": [5.0, 6.0],
+            "precipitation": [0.0, 0.1],
+            "wind_speed_10m": [10.0, 12.0],
+            "cloud_cover": [100, 90],
+            "relative_humidity_2m": [80, 85],
+        }
+    )
+    assert validate("weather_forecast", df).success
+    df.loc[1, "lead_day"] = 1
+    assert not validate("weather_forecast", df).success

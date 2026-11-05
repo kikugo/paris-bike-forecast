@@ -151,6 +151,40 @@ def load_recent_weather(engine: Engine) -> int:
     return len(df)
 
 
+def _load_previous_runs(engine: Engine, start: date, end: date, batch: str) -> int:
+    with _client() as client:
+        df = open_meteo.previous_runs(client, start, end)
+    df = df[df["ts"] <= pd.Timestamp.now(tz="UTC").floor("h")]
+    _checked(engine, "weather_forecast", df, batch)
+    db.upsert(engine, schema.weather_forecast, df, ["ts", "lead_day"])
+    return len(df)
+
+
+def backfill_weather_forecasts(engine: Engine, force: bool = False) -> int:
+    """Issued weather forecasts from the window start to yesterday, one request per month."""
+    if not force and db.already_loaded(engine, "weather_forecast", "backfill"):
+        return 0
+    end = date.today() - timedelta(days=1)
+    total = 0
+    for start in pd.date_range(config.WINDOW_START, end, freq="MS").date:
+        stop = min(end, (pd.Timestamp(start) + pd.offsets.MonthEnd(0)).date())
+        total += _load_previous_runs(engine, start, stop, f"previous runs {start:%Y-%m}")
+    db.log_ingest(engine, "weather_forecast", "backfill", total)
+    return total
+
+
+def refresh_weather_forecasts(engine: Engine, days: int = 3) -> int:
+    """Once a day, the last days of issued forecasts."""
+    key = date.today().isoformat()
+    if db.already_loaded(engine, "weather_forecast", key):
+        return 0
+    rows = _load_previous_runs(
+        engine, date.today() - timedelta(days=days), date.today(), f"previous runs refresh {key}"
+    )
+    db.log_ingest(engine, "weather_forecast", key, rows)
+    return rows
+
+
 def load_holidays(engine: Engine) -> int:
     with _client() as client:
         df = holidays.fetch(client)

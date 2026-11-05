@@ -26,3 +26,16 @@ def test_observed_only_drops_future_hours():
 def test_parse_holidays_sorted_as_dates():
     df = holidays.parse({"2026-12-25": "Jour de Noël", "2026-01-01": "1er janvier"})
     assert [str(d) for d in df.day] == ["2026-01-01", "2026-12-25"]
+
+
+def test_parse_previous_runs_is_long_by_lead_day():
+    hourly = {"time": ["2026-01-01T00:00", "2026-01-01T01:00"]}
+    for v in open_meteo.FORECAST_VARIABLES:
+        for d in open_meteo.LEAD_DAYS:
+            hourly[f"{v}_previous_day{d}"] = [float(d), None if d == 7 else float(d)]
+    df = open_meteo.parse_previous_runs({"hourly": hourly})
+    # 7 lead days at the first hour, 6 at the second (day 7 is all missing there).
+    assert len(df) == 13
+    assert sorted(df.lead_day.unique()) == list(range(1, 8))
+    row = df[(df.ts == pd.Timestamp("2026-01-01T00:00Z")) & (df.lead_day == 3)]
+    assert row.temperature_2m.item() == 3.0

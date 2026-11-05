@@ -63,6 +63,21 @@ def _weather_suite() -> list:
     ]
 
 
+def _weather_forecast_suite() -> list:
+    return [
+        gxe.ExpectColumnValuesToNotBeNull(column="ts"),
+        gxe.ExpectColumnValuesToNotBeNull(column="lead_day"),
+        gxe.ExpectCompoundColumnsToBeUnique(column_list=["ts", "lead_day"]),
+        gxe.ExpectColumnValuesToBeInSet(column="ts_offset_s", value_set=[0]),
+        gxe.ExpectColumnValuesToBeBetween(column="lead_day", min_value=1, max_value=7),
+        gxe.ExpectColumnValuesToBeBetween(column="temperature_2m", min_value=-30, max_value=50),
+        gxe.ExpectColumnValuesToBeBetween(column="relative_humidity_2m", min_value=0, max_value=100),
+        gxe.ExpectColumnValuesToBeBetween(column="precipitation", min_value=0),
+        gxe.ExpectColumnValuesToBeBetween(column="wind_speed_10m", min_value=0),
+        gxe.ExpectColumnValuesToBeBetween(column="cloud_cover", min_value=0, max_value=100),
+    ]
+
+
 def _holidays_suite() -> list:
     return [
         gxe.ExpectColumnValuesToNotBeNull(column="day"),
@@ -75,6 +90,7 @@ def _holidays_suite() -> list:
 SUITES = {
     "counts_hourly": _counts_suite,
     "weather_hourly": _weather_suite,
+    "weather_forecast": _weather_forecast_suite,
     "holidays": _holidays_suite,
 }
 
