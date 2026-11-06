@@ -10,6 +10,7 @@ import pandas as pd
 from lightgbm import LGBMRegressor
 
 from forecast import features
+from ingest.sources import school_holidays
 
 QUANTILES = (0.1, 0.5, 0.9)
 PARAMS = {
@@ -41,7 +42,8 @@ class LightGBMQuantile:
         self.counters = sorted(history["unique_id"].unique())
         origins = features.origins_before(cutoff, history["ds"].min(), horizon)
         train = features.build(
-            history, origins, horizon, _weather(exog, cutoff), exog.get("holidays"), self.counters
+            history, origins, horizon, _weather(exog, cutoff), exog.get("holidays"), self.counters,
+            _school_days(exog),
         )
         train = train[train["y"].notna()]
         X, y = train[features.FEATURES], train["y"]
@@ -54,7 +56,8 @@ class LightGBMQuantile:
         exog = exog or {}
         history = history[history["ds"] < origin]
         X = features.build(
-            history, [origin], horizon, _weather(exog, origin), exog.get("holidays"), self.counters
+            history, [origin], horizon, _weather(exog, origin), exog.get("holidays"), self.counters,
+            _school_days(exog),
         )
         preds = np.column_stack([self.models[q].predict(X[features.FEATURES]) for q in self.quantiles])
         # Separate quantile models can cross; sorting each row keeps q10 <= q50 <= q90.
@@ -72,6 +75,11 @@ class LightGBMQuantile:
 def _weather(exog: dict, cutoff: pd.Timestamp) -> pd.DataFrame | None:
     wx = exog.get("weather_fc")
     return None if wx is None else features.issued_by(wx, cutoff)
+
+
+def _school_days(exog: dict) -> pd.DatetimeIndex | None:
+    periods = exog.get("school_holidays")
+    return None if periods is None else school_holidays.days(periods)
 
 
 MODELS = {"lightgbm": LightGBMQuantile}

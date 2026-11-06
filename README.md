@@ -17,15 +17,15 @@ Work in progress. Results are added phase by phase.
 <!-- BACKTEST:START -->
 | Fold | Week from | Counters | Seasonal naive MAE | 4-week average MAE | LightGBM MAE | LightGBM 80% coverage | Interval width |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | 2026-09-07 | 95 | 16.73 | 41.52 | 16.55 | 83% | 74.5 |
-| 2 | 2026-09-14 | 95 | 14.76 | 30.89 | 14.53 | 86% | 72.4 |
-| 3 | 2026-09-21 | 95 | 17.94 | 20.22 | 20.68 | 82% | 68.3 |
-| 4 | 2026-09-28 | 95 | 22.37 | 17.45 | 23.28 | 83% | 78.6 |
-| 5 | 2026-10-05 | 95 | 20.47 | 18.63 | 17.17 | 86% | 80.3 |
-| 6 | 2026-10-12 | 95 | 20.69 | 18.77 | 16.41 | 82% | 56.9 |
-| 7 | 2026-10-19 | 95 | 35.65 | 38.10 | 24.39 | 64% | 53.2 |
-| 8 | 2026-10-26 | 94 | 36.43 | 37.93 | 26.79 | 56% | 56.1 |
-| **All folds** |  |  | **22.96** | **28.06** | **19.80** | **78%** | **67.6** |
+| 1 | 2026-09-07 | 95 | 16.73 | 41.52 | 16.65 | 82% | 70.6 |
+| 2 | 2026-09-14 | 95 | 14.76 | 30.89 | 14.51 | 86% | 68.4 |
+| 3 | 2026-09-21 | 95 | 17.94 | 20.22 | 20.43 | 84% | 70.0 |
+| 4 | 2026-09-28 | 95 | 22.37 | 17.45 | 23.99 | 83% | 77.0 |
+| 5 | 2026-10-05 | 95 | 20.47 | 18.63 | 16.11 | 89% | 76.0 |
+| 6 | 2026-10-12 | 95 | 20.69 | 18.77 | 16.57 | 81% | 54.1 |
+| 7 | 2026-10-19 | 95 | 35.65 | 38.10 | 19.29 | 73% | 54.4 |
+| 8 | 2026-10-26 | 94 | 36.43 | 37.93 | 26.66 | 57% | 54.5 |
+| **All folds** |  |  | **22.96** | **28.06** | **19.16** | **79%** | **65.6** |
 
 8 rolling-origin folds, each trained on every hour before its cutoff and scored on the next 168 hours. Data snapshot 2024-01-01 to 2026-11-05, 95 counters. Scores pool every counter-hour with a known count.
 <!-- BACKTEST:END -->
@@ -35,15 +35,15 @@ Work in progress. Results are added phase by phase.
 | --- | --- | --- | --- | --- |
 | Seasonal naive (same hour last week) | 22.96 | 46.27 | 34.4 |  |
 | Seasonal naive, 4-week average | 28.06 | 55.62 | 35.6 | +22.2% |
-| LightGBM (median) | 19.80 | 39.49 | 30.4 | -13.8% |
+| LightGBM (median) | 19.16 | 38.42 | 30.0 | -16.5% |
 <!-- OVERALL:END -->
 
 <!-- CHAMPION:START -->
-Last training run: model version 2, backtest MAE 19.80, not promoted (does not beat the champion). Champion: version 1, MAE 19.80.
+Last training run: model version 3, backtest MAE 19.16, promoted to champion (beats the champion). Previous champion: version 1, MAE 19.80.
 <!-- CHAMPION:END -->
 
-The LightGBM interval holds close to its 80% target in ordinary weeks and falls short in the
-Toussaint school-holiday weeks, which the model has no feature for yet (see Limitations).
+The LightGBM interval holds close to its 80% target in ordinary weeks. It still falls short in the
+second Toussaint school-holiday week (see Limitations).
 
 ## Architecture
 
@@ -88,7 +88,8 @@ Every feature is known at the forecast cutoff (`forecast/features.py`):
 
 - counts: the same hour one week earlier, the same hour on the last day before the cutoff, the mean
   of the same hour over the last four weeks, and the means of the last day and the last week;
-- calendar in Paris local time: hour, day of week, month, public holiday, day before and after;
+- calendar in Paris local time: hour, day of week, month, public holiday, day before and after,
+  and Paris school holidays (the national school calendar, published years ahead);
 - weather **forecasts as they were issued** before the cutoff (Open-Meteo Previous Runs API, one to
   seven days ahead), never the weather that was later observed;
 - the counter id.
@@ -99,8 +100,8 @@ when the new version beats the current champion's backtest MAE on the same snaps
 
 ## Limitations
 
-- No school-holiday feature yet: in the Toussaint weeks LightGBM still beats both baselines on MAE,
-  but its 80% interval covers far fewer hours than it should.
+- The second week of the Toussaint school holidays is still poorly covered: the school-holiday
+  flag fixed most of the first week, but the model has seen only two earlier Toussaint breaks.
 - Folds cover September to early November only. Summer and winter behaviour is trained on but not
   scored.
 - One weather point for the whole city.
@@ -110,12 +111,13 @@ when the new version beats the current champion's backtest MAE on the same snaps
 <!-- DATA:START -->
 | Source | Licence | Coverage | Notes |
 | --- | --- | --- | --- |
-| [Comptage vélo - Données compteurs (13 rolling months)](https://opendata.paris.fr/explore/dataset/comptage-velo-donnees-compteurs/information/) | Open Database License (ODbL) | 2025-10-02 to 2026-11-01 | 113 counters, 1,036,713 hourly rows |
+| [Comptage vélo - Données compteurs (13 rolling months)](https://opendata.paris.fr/explore/dataset/comptage-velo-donnees-compteurs/information/) | Open Database License (ODbL) | 2025-10-06 to 2026-11-05 | 113 counters, 1,036,142 hourly rows |
 | [Comptage vélo - Historique (yearly files)](https://opendata.paris.fr/explore/dataset/comptage-velo-historique-donnees-compteurs/information/) | Open Database License (ODbL) | 2016-01-01 to 2025-12-31 | 10 yearly files |
 | [Open-Meteo historical weather API](https://open-meteo.com/en/licence) | CC BY 4.0 | 1940-01-01 to yesterday |  |
 | [Jours fériés, metropolitan France (calendrier.api.gouv.fr)](https://www.data.gouv.fr/datasets/jours-feries-en-france) | Licence Ouverte / Open Licence version 2.0 | 2006-01-01 to 2031-12-25 |  |
+| [Calendrier scolaire, Paris (Zone C)](https://data.education.gouv.fr/explore/dataset/fr-en-calendrier-scolaire/information/) | Licence Ouverte v2.0 (Etalab) | 2017-10-21 to 2028-05-28 |  |
 
-Checked 2026-11-03 by `ingest/sources_report.py`. This project ingests from 2024-01-01 onwards.
+Checked 2026-11-06 by `ingest/sources_report.py`. This project ingests from 2024-01-01 onwards.
 <!-- DATA:END -->
 
 Weather data by [Open-Meteo.com](https://open-meteo.com/). Bike counter data © Ville de Paris,

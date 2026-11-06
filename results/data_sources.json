@@ -1,16 +1,16 @@
 {
-  "checked_at": "2026-11-03T01:21:20+00:00",
+  "checked_at": "2026-11-06T17:10:10+00:00",
   "window_start": "2024-01-01",
   "sources": {
     "counters_live": {
       "name": "Comptage vélo - Données compteurs (13 rolling months)",
       "licence": "Open Database License (ODbL)",
       "page": "https://opendata.paris.fr/explore/dataset/comptage-velo-donnees-compteurs/information/",
-      "modified": "2026-11-02T07:47:58+00:00",
-      "first": "2025-10-02",
-      "last": "2026-11-01",
+      "modified": "2026-11-06T07:54:51+00:00",
+      "first": "2025-10-06",
+      "last": "2026-11-05",
       "counters": 113,
-      "rows": 1036713
+      "rows": 1036142
     },
     "counters_history": {
       "name": "Comptage vélo - Historique (yearly files)",
@@ -34,6 +34,13 @@
       "page": "https://www.data.gouv.fr/datasets/jours-feries-en-france",
       "first": "2006-01-01",
       "last": "2031-12-25"
+    },
+    "school_holidays": {
+      "name": "Calendrier scolaire, Paris (Zone C)",
+      "licence": "Licence Ouverte v2.0 (Etalab)",
+      "page": "https://data.education.gouv.fr/explore/dataset/fr-en-calendrier-scolaire/information/",
+      "first": "2017-10-21",
+      "last": "2028-05-28"
     }
   }
 }

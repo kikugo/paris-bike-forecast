@@ -87,11 +87,22 @@ def _holidays_suite() -> list:
     ]
 
 
+def _school_holidays_suite() -> list:
+    return [
+        gxe.ExpectColumnValuesToNotBeNull(column="first_day"),
+        gxe.ExpectColumnValuesToBeUnique(column="first_day"),
+        gxe.ExpectColumnValuesToNotBeNull(column="last_day"),
+        gxe.ExpectColumnPairValuesAToBeGreaterThanB(column_A="last_day", column_B="first_day", or_equal=True),
+        gxe.ExpectTableRowCountToBeBetween(min_value=1),
+    ]
+
+
 SUITES = {
     "counts_hourly": _counts_suite,
     "weather_hourly": _weather_suite,
     "weather_forecast": _weather_forecast_suite,
     "holidays": _holidays_suite,
+    "school_holidays": _school_holidays_suite,
 }
 
 

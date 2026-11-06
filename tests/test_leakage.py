@@ -56,7 +56,11 @@ def _exog():
     issued = wx.ts - pd.to_timedelta(wx.lead_day * 24, unit="h")
     wx.loc[issued > CUTOFF, features.WEATHER] = 1e6
     holidays = pd.DataFrame({"day": [pd.Timestamp("2026-02-11")]})
-    return {"weather_fc": wx, "holidays": holidays}
+    school = pd.DataFrame(
+        {"first_day": [pd.Timestamp("2026-02-07").date()], "last_day": [pd.Timestamp("2026-02-22").date()],
+         "description": ["Vacances d'Hiver"]}
+    )
+    return {"weather_fc": wx, "holidays": holidays, "school_holidays": school}
 
 
 def test_lightgbm_does_not_look_past_the_cutoff():

@@ -112,7 +112,8 @@ def champion_line(decision: dict) -> str:
         f"{decision['candidate_mae']:.2f}, {verdict} ({decision['reason']})."
     )
     if "champion_version" in decision:
-        line += f" Champion: version {decision['champion_version']}, MAE {decision['champion_mae']:.2f}."
+        role = "Previous champion" if decision["promote"] else "Champion"
+        line += f" {role}: version {decision['champion_version']}, MAE {decision['champion_mae']:.2f}."
     return line
 
 

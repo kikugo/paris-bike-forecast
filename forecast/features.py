@@ -26,6 +26,7 @@ FEATURES = [
     "is_holiday",
     "day_before_holiday",
     "day_after_holiday",
+    "is_school_holiday",
     "lag_168",
     "last_day_same_hour",
     "mean_same_hour_of_week_4w",
@@ -61,6 +62,7 @@ def build(
     weather_fc: pd.DataFrame | None = None,
     holidays: pd.DataFrame | None = None,
     counters: list[str] | None = None,
+    school_days: pd.DatetimeIndex | None = None,
 ) -> pd.DataFrame:
     """One row per (origin, counter, target hour) with FEATURES and the target `y` (NaN if unknown).
 
@@ -117,6 +119,8 @@ def build(
     df["is_holiday"] = local_day.isin(days).astype(int)
     df["day_before_holiday"] = (local_day + one_day).isin(days).astype(int)
     df["day_after_holiday"] = (local_day - one_day).isin(days).astype(int)
+    school = pd.DatetimeIndex([]) if school_days is None else school_days
+    df["is_school_holiday"] = local_day.isin(school).astype(int)
 
     df["lead_day"] = lead_day(df["lead_hours"].to_numpy())
     if weather_fc is not None and not weather_fc.empty:

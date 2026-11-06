@@ -19,6 +19,7 @@ import pandas as pd
 
 from forecast import backtest, features
 from forecast.lgbm import LightGBMQuantile
+from ingest.sources import school_holidays
 
 EXPERIMENT = "paris-bike-forecast"
 MODEL_NAME = "paris-bike-lgbm"
@@ -129,6 +130,7 @@ def main() -> None:
             example = features.build(
                 data[data["ds"] < final_cutoff(data)], [final_cutoff(data).floor("D")], 24,
                 exog["weather_fc"], exog["holidays"], model.counters,
+                school_holidays.days(exog["school_holidays"]),
             )[features.FEATURES].head(5)
             example["counter"] = example["counter"].astype(str)  # the model casts it back
             info = mlflow.pyfunc.log_model(

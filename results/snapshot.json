@@ -6,5 +6,6 @@
   "rows_with_count": 2342321,
   "counts_sha256": "dc20fdd92e89f5991f716c240bc188ee6a3539a3d727760d0bcf1c8675084a33",
   "weather_forecast_rows": 171115,
-  "weather_forecast_sha256": "3309f1b2265e9d506d1772df6327e302d9bd503bf4b12ccc483e9a27cb910741"
+  "weather_forecast_sha256": "3309f1b2265e9d506d1772df6327e302d9bd503bf4b12ccc483e9a27cb910741",
+  "school_holiday_periods": 63
 }

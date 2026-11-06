@@ -10,7 +10,7 @@ from pathlib import Path
 import httpx
 
 from ingest import config
-from ingest.sources import holidays, open_meteo, paris_counters
+from ingest.sources import holidays, open_meteo, paris_counters, school_holidays
 
 PARIS_PAGE = "https://opendata.paris.fr/explore/dataset/{}/information/"
 DATAGOUV_HOLIDAYS = "https://www.data.gouv.fr/api/1/datasets/jours-feries-en-france/"
@@ -18,6 +18,8 @@ DATAGOUV_LICENSES = "https://www.data.gouv.fr/api/1/datasets/licenses/"
 # Open-Meteo states its licence on a web page, not in the API.
 OPEN_METEO_LICENCE = {"licence": "CC BY 4.0", "page": "https://open-meteo.com/en/licence"}
 OPEN_METEO_EARLIEST = "1940-01-01"
+SCHOOL_CATALOG = "https://data.education.gouv.fr/api/explore/v2.1/catalog/datasets/fr-en-calendrier-scolaire"
+SCHOOL_PAGE = "https://data.education.gouv.fr/explore/dataset/fr-en-calendrier-scolaire/information/"
 
 
 def _paris_meta(client: httpx.Client, dataset: str) -> dict:
@@ -63,6 +65,14 @@ def build(client: httpx.Client) -> dict:
         "first": hol["day"].min().isoformat(),
         "last": hol["day"].max().isoformat(),
     }
+    school_meta = client.get(SCHOOL_CATALOG).json()["metas"]["default"]
+    school = school_holidays.fetch(client)
+    school_entry = {
+        "licence": school_meta["license"],
+        "page": SCHOOL_PAGE,
+        "first": school["first_day"].min().isoformat(),
+        "last": school["last_day"].max().isoformat(),
+    }
     return {
         "checked_at": datetime.now(UTC).isoformat(timespec="seconds"),
         "window_start": config.WINDOW_START.isoformat(),
@@ -71,6 +81,7 @@ def build(client: httpx.Client) -> dict:
             "counters_history": {"name": "Comptage vélo - Historique (yearly files)", **history},
             "weather": {"name": "Open-Meteo historical weather API", **weather},
             "holidays": {"name": "Jours fériés, metropolitan France (calendrier.api.gouv.fr)", **calendar},
+            "school_holidays": {"name": "Calendrier scolaire, Paris (Zone C)", **school_entry},
         },
     }
 

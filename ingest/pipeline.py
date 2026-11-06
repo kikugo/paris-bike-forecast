@@ -9,7 +9,7 @@ from sqlalchemy import Engine
 
 from ingest import config, db, schema
 from ingest.expectations import Validation, require, validate
-from ingest.sources import holidays, open_meteo, paris_counters
+from ingest.sources import holidays, open_meteo, paris_counters, school_holidays
 
 
 def _client() -> httpx.Client:
@@ -191,4 +191,13 @@ def load_holidays(engine: Engine) -> int:
     _checked(engine, "holidays", df, "metropole")
     db.upsert(engine, schema.holidays, df, ["day"])
     db.log_ingest(engine, "holidays", date.today().isoformat(), len(df))
+    return len(df)
+
+
+def load_school_holidays(engine: Engine) -> int:
+    with _client() as client:
+        df = school_holidays.fetch(client)
+    _checked(engine, "school_holidays", df, "paris zone c")
+    db.upsert(engine, schema.school_holidays, df, ["first_day"])
+    db.log_ingest(engine, "school_holidays", date.today().isoformat(), len(df))
     return len(df)

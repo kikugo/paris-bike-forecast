@@ -70,6 +70,14 @@ holidays = Table(
     Column("name", String, nullable=False),
 )
 
+school_holidays = Table(
+    "school_holidays",
+    metadata,
+    Column("first_day", Date, primary_key=True),
+    Column("last_day", Date, nullable=False),
+    Column("description", String, nullable=False),
+)
+
 ingest_log = Table(
     "ingest_log",
     metadata,
