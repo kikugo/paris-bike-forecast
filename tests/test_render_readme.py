@@ -82,3 +82,14 @@ def test_champion_line():
     assert rr.champion_line(later).endswith(" Champion: version 1, MAE 19.80.")
     promoted = later | {"promote": True, "reason": "beats the champion", "candidate_mae": 19.1}
     assert rr.champion_line(promoted).endswith("Previous champion: version 1, MAE 19.80.")
+
+
+def test_monitoring_table():
+    summary = {
+        "scores": {"live": {"days": 4, "first_day": "2026-11-02", "last_day": "2026-11-05", "mae": 17.155, "coverage_80": 0.7186}},
+        "drift": {"day": "2026-11-05", "psi": {"count": 0.06, "weather_temperature_2m": 0.41}, "alert_threshold": 0.2},
+    }
+    table = rr.monitoring_table(summary)
+    assert "| Live, issued weekly | 4 | 2026-11-02 | 2026-11-05 | 17.16 | 72% |" in table
+    assert "| weather_temperature_2m | 0.410 (above threshold) |" in table
+    assert "| count | 0.060 |" in table

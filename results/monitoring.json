@@ -1,0 +1,30 @@
+{
+  "scores": {
+    "backtest": {
+      "days": 56,
+      "first_day": "2026-09-07",
+      "last_day": "2026-11-01",
+      "mae": 19.1628,
+      "coverage_80": 0.7947
+    },
+    "live": {
+      "days": 4,
+      "first_day": "2026-11-02",
+      "last_day": "2026-11-05",
+      "mae": 17.1552,
+      "coverage_80": 0.7186
+    }
+  },
+  "drift": {
+    "day": "2026-11-05",
+    "psi": {
+      "count": 0.0848,
+      "weather_temperature_2m": 0.0906,
+      "weather_precipitation": 0.0,
+      "weather_wind_speed_10m": 0.1277,
+      "weather_cloud_cover": 0.2075,
+      "weather_relative_humidity_2m": 0.2941
+    },
+    "alert_threshold": 0.2
+  }
+}
