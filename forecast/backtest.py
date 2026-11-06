@@ -19,6 +19,8 @@ import pandas as pd
 from forecast import metrics
 from forecast.baselines import MODELS as BASELINES
 from forecast.data import HOUR
+from forecast.features import issued_by
+from forecast.lgbm import MODELS as LGBM
 
 ROOT = Path(__file__).resolve().parents[1]
 SNAPSHOT_DIR = ROOT / "data" / "snapshot"
@@ -31,7 +33,9 @@ class Forecaster(Protocol):
     name: str
     label: str
 
-    def fit_predict(self, history: pd.DataFrame, cutoff: pd.Timestamp, horizon: int) -> pd.DataFrame: ...
+    def fit_predict(
+        self, history: pd.DataFrame, cutoff: pd.Timestamp, horizon: int, exog: dict | None = None
+    ) -> pd.DataFrame: ...
 
 
 def fold_cutoffs(data_end: pd.Timestamp, n_folds: int = FOLDS, horizon: int = HORIZON) -> list[pd.Timestamp]:
@@ -44,13 +48,30 @@ def fold_cutoffs(data_end: pd.Timestamp, n_folds: int = FOLDS, horizon: int = HO
     return [last - pd.Timedelta(weeks=n_folds - 1 - i) for i in range(n_folds)]
 
 
+def exog_known_at(exog: dict | None, cutoff: pd.Timestamp) -> dict | None:
+    """Exogenous data as it existed at the cutoff: weather forecasts issued later are removed.
+    Public holidays are fixed in advance and kept."""
+    if not exog:
+        return exog
+    out = dict(exog)
+    if exog.get("weather_fc") is not None:
+        out["weather_fc"] = issued_by(exog["weather_fc"], cutoff)
+    return out
+
+
 def forecast_unchanged_after_deletion(
-    model: Forecaster, data: pd.DataFrame, cutoff: pd.Timestamp, horizon: int = HORIZON
+    model: Forecaster,
+    data: pd.DataFrame,
+    cutoff: pd.Timestamp,
+    horizon: int = HORIZON,
+    exog: dict | None = None,
 ) -> bool:
-    """The leakage check: a forecast made at the cutoff must not change when every row at or
-    after the cutoff is deleted. The model gets the full frame on purpose."""
-    full = model.fit_predict(data, cutoff, horizon).sort_values(["unique_id", "ds"]).reset_index(drop=True)
-    cut = model.fit_predict(data[data["ds"] < cutoff], cutoff, horizon)
+    """The leakage check: a forecast made at the cutoff must not change when every row after
+    the cutoff is deleted, counts and issued weather forecasts alike. The model gets the full
+    data on purpose."""
+    full = model.fit_predict(data, cutoff, horizon, exog)
+    full = full.sort_values(["unique_id", "ds"]).reset_index(drop=True)
+    cut = model.fit_predict(data[data["ds"] < cutoff], cutoff, horizon, exog_known_at(exog, cutoff))
     cut = cut.sort_values(["unique_id", "ds"]).reset_index(drop=True)
     return full[["unique_id", "ds"]].equals(cut[["unique_id", "ds"]]) and np.allclose(
         full["yhat"].to_numpy(), cut["yhat"].to_numpy(), equal_nan=True
@@ -62,6 +83,7 @@ def run(
     data: pd.DataFrame,
     cutoffs: list[pd.Timestamp],
     horizon: int = HORIZON,
+    exog: dict | None = None,
 ) -> dict:
     models = list(models)
     folds, pooled = [], {m.name: [] for m in models}
@@ -78,23 +100,40 @@ def run(
             "models": {},
         }
         for model in models:
-            fc = model.fit_predict(history, cutoff, horizon)
+            fc = model.fit_predict(history, cutoff, horizon, exog_known_at(exog, cutoff))
             scored = actual.merge(fc, on=["unique_id", "ds"], how="left")
             if scored["yhat"].isna().any():
                 raise RuntimeError(f"{model.name} left hours without a forecast at fold {i}")
-            fold["models"][model.name] = metrics.score(scored["y"], scored["yhat"])
-            pooled[model.name].append(scored[["y", "yhat"]])
+            fold["models"][model.name] = _score(scored)
+            pooled[model.name].append(scored)
         folds.append(fold)
     overall = {}
     for model in models:
-        both = pd.concat(pooled[model.name], ignore_index=True)
-        overall[model.name] = metrics.score(both["y"], both["yhat"])
+        overall[model.name] = _score(pd.concat(pooled[model.name], ignore_index=True))
     return {
         "horizon_hours": horizon,
         "models": {m.name: m.label for m in models},
         "folds": folds,
         "overall": overall,
     }
+
+
+def _score(scored: pd.DataFrame) -> dict:
+    out = metrics.score(scored["y"], scored["yhat"])
+    if {"q10", "q50", "q90"} <= set(scored.columns):
+        out |= metrics.interval_score(
+            scored["y"],
+            scored["q10"],
+            scored["q90"],
+            {0.1: scored["q10"], 0.5: scored["q50"], 0.9: scored["q90"]},
+        )
+    return out
+
+
+def load_exog(directory: Path = SNAPSHOT_DIR) -> dict:
+    wx = pd.read_parquet(directory / "weather_forecast.parquet")
+    wx["ts"] = pd.to_datetime(wx["ts"], utc=True).dt.tz_localize(None)
+    return {"weather_fc": wx, "holidays": pd.read_parquet(directory / "holidays.parquet")}
 
 
 def load_snapshot(directory: Path = SNAPSHOT_DIR) -> pd.DataFrame:
@@ -106,7 +145,7 @@ def load_snapshot(directory: Path = SNAPSHOT_DIR) -> pd.DataFrame:
 
 
 def main(argv: list[str] | None = None, registry: dict[str, Callable[[], Forecaster]] | None = None) -> None:
-    registry = registry or BASELINES
+    registry = registry or (BASELINES | LGBM)
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--models", nargs="+", default=list(registry))
     parser.add_argument("--folds", type=int, default=FOLDS)
@@ -116,7 +155,8 @@ def main(argv: list[str] | None = None, registry: dict[str, Callable[[], Forecas
     snapshot = json.loads((RESULTS / "snapshot.json").read_text())
     data = load_snapshot()
     cutoffs = fold_cutoffs(data["ds"].max(), args.folds)
-    result = run([registry[name]() for name in args.models], data, cutoffs)
+    exog = load_exog()
+    result = run([registry[name]() for name in args.models], data, cutoffs, exog=exog)
     result = {"snapshot": snapshot, **result}
     Path(args.out).write_text(json.dumps(result, indent=2) + "\n")
     for name, s in result["overall"].items():

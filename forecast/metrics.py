@@ -32,3 +32,22 @@ def score(y, yhat) -> dict:
         "smape": round(smape(y, yhat), DECIMALS),
         "n": len(y),
     }
+
+
+def pinball(y: np.ndarray, q_pred: np.ndarray, q: float) -> float:
+    diff = y - q_pred
+    return float(np.mean(np.maximum(q * diff, (q - 1) * diff)))
+
+
+def interval_score(y, lower, upper, quantiles: dict[float, np.ndarray]) -> dict:
+    """80% interval coverage and width, and mean pinball loss over the given quantiles."""
+    y = np.asarray(y, dtype=float)
+    lower = np.asarray(lower, dtype=float)
+    upper = np.asarray(upper, dtype=float)
+    return {
+        "coverage_80": round(float(np.mean((y >= lower) & (y <= upper))), DECIMALS),
+        "interval_width": round(float(np.mean(upper - lower)), DECIMALS),
+        "pinball": round(
+            float(np.mean([pinball(y, np.asarray(p, dtype=float), q) for q, p in quantiles.items()])), DECIMALS
+        ),
+    }
