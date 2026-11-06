@@ -62,3 +62,40 @@ def recent(client: httpx.Client, past_days: int = 2) -> pd.DataFrame:
     resp = client.get(FORECAST_URL, params=_params(past_days=past_days, forecast_days=1))
     resp.raise_for_status()
     return observed_only(parse_hourly(resp.json(), "forecast"))
+
+
+# Weather forecasts as they were issued, from the Previous Runs API: `<var>_previous_day<d>` is the
+# value forecast d x 24 hours before the valid hour. Forecasting models must use these rather than
+# observed weather, which is not known at the forecast cutoff.
+PREVIOUS_RUNS_URL = "https://previous-runs-api.open-meteo.com/v1/forecast"
+FORECAST_VARIABLES = [
+    "temperature_2m",
+    "precipitation",
+    "wind_speed_10m",
+    "cloud_cover",
+    "relative_humidity_2m",
+]
+LEAD_DAYS = range(1, 8)
+
+
+def parse_previous_runs(payload: dict) -> pd.DataFrame:
+    hourly = payload["hourly"]
+    ts = pd.to_datetime(hourly["time"]).tz_localize("UTC")
+    parts = []
+    for d in LEAD_DAYS:
+        part = pd.DataFrame({v: hourly[f"{v}_previous_day{d}"] for v in FORECAST_VARIABLES})
+        part.insert(0, "lead_day", d)
+        part.insert(0, "ts", ts)
+        parts.append(part)
+    df = pd.concat(parts, ignore_index=True)
+    return df.dropna(subset=FORECAST_VARIABLES, how="all").sort_values(["ts", "lead_day"]).reset_index(drop=True)
+
+
+def previous_runs(client: httpx.Client, start: date, end: date) -> pd.DataFrame:
+    hourly = ",".join(f"{v}_previous_day{d}" for v in FORECAST_VARIABLES for d in LEAD_DAYS)
+    resp = client.get(
+        PREVIOUS_RUNS_URL,
+        params=_params(start_date=start.isoformat(), end_date=end.isoformat()) | {"hourly": hourly},
+    )
+    resp.raise_for_status()
+    return parse_previous_runs(resp.json())

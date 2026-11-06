@@ -46,19 +46,37 @@ def test_fills_an_empty_block():
 BACKTEST = {
     "snapshot": {"start": "2024-01-01T00:00:00+00:00", "end": "2026-11-01T22:00:00+00:00", "counters": 2},
     "horizon_hours": 168,
-    "models": {"a": "Model A", "b": "Model B"},
+    "models": {"seasonal_naive": "Seasonal naive (same hour last week)", "lightgbm": "LightGBM (median)"},
     "folds": [
         {"fold": 1, "cutoff": "2026-10-19T00:00:00", "counters": 2,
-         "models": {"a": {"mae": 1.234, "rmse": 2.0, "smape": 10.04, "n": 5},
-                    "b": {"mae": 3.0, "rmse": 4.0, "smape": 20.0, "n": 5}}},
+         "models": {"seasonal_naive": {"mae": 20.0, "rmse": 30.0, "smape": 40.0, "n": 5},
+                    "lightgbm": {"mae": 15.0, "rmse": 25.0, "smape": 35.0, "n": 5,
+                                 "coverage_80": 0.8123, "interval_width": 50.04, "pinball": 5.0}}},
     ],
-    "overall": {"a": {"mae": 1.234, "rmse": 2.0, "smape": 10.04, "n": 5},
-                "b": {"mae": 3.0, "rmse": 4.0, "smape": 20.0, "n": 5}},
+    "overall": {"seasonal_naive": {"mae": 20.0, "rmse": 30.0, "smape": 40.0, "n": 5},
+                "lightgbm": {"mae": 15.0, "rmse": 25.0, "smape": 35.0, "n": 5,
+                             "coverage_80": 0.8123, "interval_width": 50.04, "pinball": 5.0}},
 }
 
 
 def test_backtest_table():
     table = rr.backtest_table(BACKTEST)
-    assert "| Fold | Week from | Counters | Model A MAE | RMSE | sMAPE % | Model B MAE | RMSE | sMAPE % |" in table
-    assert "| 1 | 2026-10-19 | 2 | 1.23 | 2.00 | 10.0 | 3.00 | 4.00 | 20.0 |" in table
-    assert "| **All folds** |  |  | **1.23** |" in table
+    assert "| Fold | Week from | Counters | Seasonal naive MAE | LightGBM MAE | LightGBM 80% coverage | Interval width |" in table
+    assert "| 1 | 2026-10-19 | 2 | 20.00 | 15.00 | 81% | 50.0 |" in table
+    assert "| **All folds** |  |  | **20.00** | **15.00** | **81%** | **50.0** |" in table
+
+
+def test_overall_table_has_change_against_seasonal_naive():
+    table = rr.overall_table(BACKTEST)
+    assert "| Seasonal naive (same hour last week) | 20.00 | 30.00 | 40.0 |  |" in table
+    assert "| LightGBM (median) | 15.00 | 25.00 | 35.0 | -25.0% |" in table
+
+
+def test_champion_line():
+    first = {"promote": True, "reason": "no champion yet", "candidate_mae": 19.8, "candidate_version": "1"}
+    assert rr.champion_line(first) == (
+        "Last training run: model version 1, backtest MAE 19.80, promoted to champion (no champion yet)."
+    )
+    later = first | {"promote": False, "reason": "does not beat the champion", "candidate_version": "2",
+                     "champion_version": "1", "champion_mae": 19.8}
+    assert rr.champion_line(later).endswith("Champion: version 1, MAE 19.80.")

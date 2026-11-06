@@ -30,12 +30,26 @@ def weather_hourly():
         return pipeline.refresh_weather_archive(db.get_engine())
 
     @task
+    def forecasts_backfill() -> int:
+        from ingest import db, pipeline
+
+        return pipeline.backfill_weather_forecasts(db.get_engine())
+
+    @task
+    def forecasts_refresh() -> int:
+        from ingest import db, pipeline
+
+        return pipeline.refresh_weather_forecasts(db.get_engine())
+
+    @task
     def recent() -> int:
         from ingest import db, pipeline
 
         return pipeline.load_recent_weather(db.get_engine())
 
-    backfill() >> archive_refresh() >> recent()
+    observed = backfill()
+    observed >> archive_refresh() >> recent()
+    observed >> forecasts_backfill() >> forecasts_refresh()
 
 
 weather_hourly()

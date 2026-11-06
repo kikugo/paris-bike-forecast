@@ -55,26 +55,31 @@ def gap_table(report: dict) -> str:
     )
 
 
+SHORT = {"seasonal_naive": "Seasonal naive", "seasonal_naive_4w": "4-week average", "lightgbm": "LightGBM"}
+
+
+def _short(name: str, result: dict) -> str:
+    return SHORT.get(name, result["models"][name])
+
+
 def backtest_table(result: dict) -> str:
+    """Per-fold MAE for every model, plus interval coverage and width for quantile models."""
     names = list(result["models"])
-    header = ["Fold", "Week from", "Counters"]
-    for name in names:
-        label = result["models"][name]
-        header += [f"{label} MAE", "RMSE", "sMAPE %"]
+    interval = [n for n in names if "coverage_80" in result["overall"][n]]
+    header = ["Fold", "Week from", "Counters"] + [f"{_short(n, result)} MAE" for n in names]
+    for n in interval:
+        header += [f"{_short(n, result)} 80% coverage", "Interval width"]
     rows = ["| " + " | ".join(header) + " |", "|" + " --- |" * len(header)]
 
-    def cells(scores: dict) -> list[str]:
-        out = []
-        for name in names:
-            s = scores[name]
-            out += [f"{s['mae']:.2f}", f"{s['rmse']:.2f}", f"{s['smape']:.1f}"]
-        return out
+    def cells(scores: dict, bold: bool = False) -> list[str]:
+        out = [f"{scores[n]['mae']:.2f}" for n in names]
+        for n in interval:
+            out += [f"{scores[n]['coverage_80']:.0%}", f"{scores[n]['interval_width']:.1f}"]
+        return [f"**{c}**" for c in out] if bold else out
 
     for fold in result["folds"]:
-        row = [str(fold["fold"]), fold["cutoff"][:10], str(fold["counters"])] + cells(fold["models"])
-        rows.append("| " + " | ".join(row) + " |")
-    total = ["**All folds**", "", ""] + [f"**{c}**" for c in cells(result["overall"])]
-    rows.append("| " + " | ".join(total) + " |")
+        rows.append("| " + " | ".join([str(fold["fold"]), fold["cutoff"][:10], str(fold["counters"])] + cells(fold["models"])) + " |")
+    rows.append("| " + " | ".join(["**All folds**", "", ""] + cells(result["overall"], bold=True)) + " |")
     snap = result["snapshot"]
     note = (
         f"{len(result['folds'])} rolling-origin folds, each trained on every hour before its cutoff "
@@ -82,8 +87,33 @@ def backtest_table(result: dict) -> str:
         f"{snap['start'][:10]} to {snap['end'][:10]}, {snap['counters']} counters. "
         "Scores pool every counter-hour with a known count."
     )
-    rows += ["", note]
+    return "\n".join([*rows, "", note])
+
+
+def overall_table(result: dict) -> str:
+    """MAE, RMSE and sMAPE over all folds, and each model's MAE change against seasonal naive."""
+    names = list(result["models"])
+    base = result["overall"].get("seasonal_naive")
+    rows = [
+        "| Model | MAE | RMSE | sMAPE % | MAE vs seasonal naive |",
+        "| --- | --- | --- | --- | --- |",
+    ]
+    for n in names:
+        s = result["overall"][n]
+        change = "" if base is None or n == "seasonal_naive" else f"{(s['mae'] - base['mae']) / base['mae']:+.1%}"
+        rows.append(f"| {result['models'][n]} | {s['mae']:.2f} | {s['rmse']:.2f} | {s['smape']:.1f} | {change} |")
     return "\n".join(rows)
+
+
+def champion_line(decision: dict) -> str:
+    verdict = "promoted to champion" if decision["promote"] else "not promoted"
+    line = (
+        f"Last training run: model version {decision['candidate_version']}, backtest MAE "
+        f"{decision['candidate_mae']:.2f}, {verdict} ({decision['reason']})."
+    )
+    if "champion_version" in decision:
+        line += f" Champion: version {decision['champion_version']}, MAE {decision['champion_mae']:.2f}."
+    return line
 
 
 def replace_block(text: str, name: str, body: str) -> str:
@@ -100,6 +130,10 @@ def render(text: str) -> str:
     backtest = _load("backtest.json")
     if backtest:
         text = replace_block(text, "BACKTEST", backtest_table(backtest))
+        text = replace_block(text, "OVERALL", overall_table(backtest))
+    champion = _load("champion.json")
+    if champion:
+        text = replace_block(text, "CHAMPION", champion_line(champion))
     gaps = _load("gap_report.json")
     if gaps:
         text = replace_block(text, "GAPS", gap_table(gaps))

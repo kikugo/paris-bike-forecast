@@ -1,8 +1,10 @@
 {
   "start": "2024-01-01T00:00:00+00:00",
-  "end": "2026-11-01T22:00:00+00:00",
+  "end": "2026-11-05T22:00:00+00:00",
   "counters": 95,
-  "rows": 2339111,
-  "rows_with_count": 2333297,
-  "counts_sha256": "620ab6b5c75e35df514ba71948dfe27157006bc661350d6c7d0da86d376489d3"
+  "rows": 2348135,
+  "rows_with_count": 2342321,
+  "counts_sha256": "dc20fdd92e89f5991f716c240bc188ee6a3539a3d727760d0bcf1c8675084a33",
+  "weather_forecast_rows": 171115,
+  "weather_forecast_sha256": "3309f1b2265e9d506d1772df6327e302d9bd503bf4b12ccc483e9a27cb910741"
 }

@@ -50,6 +50,19 @@ weather_hourly = Table(
     Column("source", String, nullable=False),
 )
 
+weather_forecast = Table(
+    "weather_forecast",
+    metadata,
+    Column("ts", DateTime(timezone=True), primary_key=True),
+    # Forecast issued lead_day x 24 hours before ts.
+    Column("lead_day", Integer, primary_key=True),
+    Column("temperature_2m", Float),
+    Column("precipitation", Float),
+    Column("wind_speed_10m", Float),
+    Column("cloud_cover", Float),
+    Column("relative_humidity_2m", Float),
+)
+
 holidays = Table(
     "holidays",
     metadata,

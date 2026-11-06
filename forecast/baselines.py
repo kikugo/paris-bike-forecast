@@ -15,7 +15,9 @@ class StatsBaseline:
         self.label = label
         self.model = model
 
-    def fit_predict(self, history: pd.DataFrame, cutoff: pd.Timestamp, horizon: int) -> pd.DataFrame:
+    def fit_predict(
+        self, history: pd.DataFrame, cutoff: pd.Timestamp, horizon: int, exog: dict | None = None
+    ) -> pd.DataFrame:
         past = history[history["ds"] < cutoff]
         grid = fill_history(to_grid(past, end=cutoff - HOUR))
         sf = StatsForecast(models=[self.model], freq="h", n_jobs=1)

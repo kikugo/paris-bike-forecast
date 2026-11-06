@@ -1,0 +1,11 @@
+{
+  "promote": false,
+  "reason": "does not beat the champion",
+  "candidate_mae": 19.7997,
+  "champion_version": "1",
+  "champion_mae": 19.7997,
+  "champion_rescored": false,
+  "candidate_version": "2",
+  "snapshot_sha256": "dc20fdd92e89f5991f716c240bc188ee6a3539a3d727760d0bcf1c8675084a33",
+  "run_id": "68a1b97ed0604e2aa694bf34a49aa8ea"
+}
