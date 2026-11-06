@@ -37,12 +37,14 @@ def main() -> None:
     weather = pd.read_sql("SELECT * FROM weather_hourly ORDER BY ts", engine)
     holidays = pd.read_sql("SELECT day, name FROM holidays ORDER BY day", engine)
     weather_fc = pd.read_sql("SELECT * FROM weather_forecast ORDER BY ts, lead_day", engine)
+    school = pd.read_sql("SELECT * FROM school_holidays ORDER BY first_day", engine)
 
     SNAPSHOT_DIR.mkdir(parents=True, exist_ok=True)
     counts.to_parquet(SNAPSHOT_DIR / "counts.parquet", index=False)
     weather.to_parquet(SNAPSHOT_DIR / "weather.parquet", index=False)
     holidays.to_parquet(SNAPSHOT_DIR / "holidays.parquet", index=False)
     weather_fc.to_parquet(SNAPSHOT_DIR / "weather_forecast.parquet", index=False)
+    school.to_parquet(SNAPSHOT_DIR / "school_holidays.parquet", index=False)
 
     info = {
         "start": counts["ts"].min().isoformat(),
@@ -53,6 +55,7 @@ def main() -> None:
         "counts_sha256": content_hash(counts),
         "weather_forecast_rows": len(weather_fc),
         "weather_forecast_sha256": content_hash(weather_fc),
+        "school_holiday_periods": len(school),
     }
     (RESULTS / "snapshot.json").write_text(json.dumps(info, indent=2) + "\n")
     print(json.dumps(info, indent=2))

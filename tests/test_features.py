@@ -73,3 +73,11 @@ def test_training_origins_are_mondays_that_end_before_the_cutoff():
     assert origins[0] == START + pd.Timedelta(weeks=4)
     assert origins[-1] == ORIGIN - pd.Timedelta(weeks=1)
     assert all(o.day_of_week == 0 for o in origins)
+
+
+def test_school_holiday_flag_uses_paris_dates():
+    school = pd.DatetimeIndex([ORIGIN + pd.Timedelta(days=3)])  # Thursday
+    df = features.build(_ramp(), [ORIGIN], horizon=168, school_days=school)
+    thu = df[(df.ds >= ORIGIN + pd.Timedelta(days=3)) & (df.ds < ORIGIN + pd.Timedelta(days=4))]
+    assert thu.is_school_holiday.sum() == 23  # 23:00 UTC is already Friday in Paris (winter)
+    assert df.is_school_holiday.sum() == 24

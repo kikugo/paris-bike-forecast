@@ -50,7 +50,7 @@ def fold_cutoffs(data_end: pd.Timestamp, n_folds: int = FOLDS, horizon: int = HO
 
 def exog_known_at(exog: dict | None, cutoff: pd.Timestamp) -> dict | None:
     """Exogenous data as it existed at the cutoff: weather forecasts issued later are removed.
-    Public holidays are fixed in advance and kept."""
+    Public and school holidays are published years in advance and kept."""
     if not exog:
         return exog
     out = dict(exog)
@@ -133,7 +133,11 @@ def _score(scored: pd.DataFrame) -> dict:
 def load_exog(directory: Path = SNAPSHOT_DIR) -> dict:
     wx = pd.read_parquet(directory / "weather_forecast.parquet")
     wx["ts"] = pd.to_datetime(wx["ts"], utc=True).dt.tz_localize(None)
-    return {"weather_fc": wx, "holidays": pd.read_parquet(directory / "holidays.parquet")}
+    return {
+        "weather_fc": wx,
+        "holidays": pd.read_parquet(directory / "holidays.parquet"),
+        "school_holidays": pd.read_parquet(directory / "school_holidays.parquet"),
+    }
 
 
 def load_snapshot(directory: Path = SNAPSHOT_DIR) -> pd.DataFrame:
