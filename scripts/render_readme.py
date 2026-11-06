@@ -117,6 +117,24 @@ def champion_line(decision: dict) -> str:
     return line
 
 
+def monitoring_table(summary: dict) -> str:
+    rows = ["| Forecasts | Days scored | From | To | MAE | 80% coverage |", "| --- | --- | --- | --- | --- | --- |"]
+    labels = {"backtest": "Backtest folds (out of sample)", "live": "Live, issued weekly"}
+    for source, s in sorted(summary["scores"].items()):
+        rows.append(
+            f"| {labels.get(source, source)} | {s['days']} | {s['first_day']} | {s['last_day']} "
+            f"| {s['mae']:.2f} | {s['coverage_80']:.0%} |"
+        )
+    drift = summary.get("drift")
+    if drift:
+        rows += ["", f"Feature drift on {drift['day']} (PSI, alert above {drift['alert_threshold']}):", "",
+                 "| Input | PSI |", "| --- | --- |"]
+        for feature, value in sorted(drift["psi"].items()):
+            flag = " (above threshold)" if value > drift["alert_threshold"] else ""
+            rows.append(f"| {feature} | {value:.3f}{flag} |")
+    return "\n".join(rows)
+
+
 def replace_block(text: str, name: str, body: str) -> str:
     pattern = re.compile(rf"(<!-- {name}:START -->\n).*?(<!-- {name}:END -->)", re.DOTALL)
     if not pattern.search(text):
@@ -132,6 +150,9 @@ def render(text: str) -> str:
     if backtest:
         text = replace_block(text, "BACKTEST", backtest_table(backtest))
         text = replace_block(text, "OVERALL", overall_table(backtest))
+    monitoring = _load("monitoring.json")
+    if monitoring:
+        text = replace_block(text, "MONITORING", monitoring_table(monitoring))
     champion = _load("champion.json")
     if champion:
         text = replace_block(text, "CHAMPION", champion_line(champion))

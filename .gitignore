@@ -26,3 +26,6 @@ airflow/logs/
 
 # Frozen copy of the clean data the backtest reads
 data/snapshot/
+
+# Backtest fold predictions (seeded into the forecasts table)
+data/backtest/

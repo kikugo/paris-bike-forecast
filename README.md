@@ -48,11 +48,14 @@ second Toussaint school-holiday week (see Limitations).
 ## Architecture
 
 ```
-opendata.paris.fr ──┐
-Open-Meteo ─────────┼─> Airflow DAGs ─> Great Expectations ─> Postgres ─> Grafana
-calendrier.api ─────┘    (ingest/)        (every load)        (bikes)    (data quality)
-                                                                 │
-                                                       MLflow (models, later phases)
+opendata.paris.fr ─┐                                                    ┌─> FastAPI /forecast
+Open-Meteo ────────┼─> Airflow ingest DAGs ─> Great Expectations ─> Postgres
+calendrier / école ┘                                                │   └─> Grafana (data quality,
+                                                                    │        model monitoring, alerts)
+        snapshot ─> backtest ─> MLflow (runs, registry, champion) ──┤
+                                                                    │
+        forecast_weekly DAG: champion -> forecasts table ───────────┤
+        score_daily DAG: forecasts vs counts -> scores, PSI drift ──┘
 ```
 
 - `counters_backfill` (manual): yearly history files, then the live dataset, then the gap report.
@@ -98,6 +101,51 @@ Every feature is known at the forecast cutoff (`forecast/features.py`):
 file), fits the final model on the whole snapshot, registers it, and moves the `champion` alias only
 when the new version beats the current champion's backtest MAE on the same snapshot.
 
+## Serving and monitoring
+
+The model was trained and backtested as a weekly forecast made on Monday at 00:00 UTC for the next
+168 hours, so that is how it is served:
+
+- `forecast_weekly` (Mondays, after the morning data load) loads the MLflow `champion`, builds the
+  features for that Monday from Postgres with the weather forecast available at that moment, and
+  writes the 0.1 / 0.5 / 0.9 quantiles for every counter and hour of the week to `forecasts`.
+  It refuses a week the champion was trained on, so a model is never scored on its own training
+  data.
+- The API (`api/main.py`) reads that table: `GET /forecast/{counter_id}?hours=24` returns the next
+  hours from now with the interval, the model version and when it was issued.
+- `score_daily` scores every day with known counts: MAE and 80% coverage per source and model
+  version go to `forecast_scores`. It also computes PSI for the model's inputs (hourly counts and
+  the day-ahead weather forecasts), comparing the last 28 days with the same weeks in earlier years.
+- Grafana's "Model monitoring" dashboard shows daily MAE, coverage and PSI. Two provisioned alert
+  rules fire when any input's PSI goes above 0.2 or when live coverage over a week drops below 0.7.
+
+The backtest folds' forecasts are loaded into the same table as `backtest` rows, so the dashboard
+has out-of-sample history from the start. The first live week was issued by a model retrained on
+data before that Monday (`forecast.live --retrain`), because the current champion had already seen
+part of that week.
+
+<!-- MONITORING:START -->
+| Forecasts | Days scored | From | To | MAE | 80% coverage |
+| --- | --- | --- | --- | --- | --- |
+| Backtest folds (out of sample) | 56 | 2026-09-07 | 2026-11-01 | 19.16 | 79% |
+| Live, issued weekly | 4 | 2026-11-02 | 2026-11-05 | 17.16 | 72% |
+
+Feature drift on 2026-11-05 (PSI, alert above 0.2):
+
+| Input | PSI |
+| --- | --- |
+| count | 0.085 |
+| weather_cloud_cover | 0.207 (above threshold) |
+| weather_precipitation | 0.000 |
+| weather_relative_humidity_2m | 0.294 (above threshold) |
+| weather_temperature_2m | 0.091 |
+| weather_wind_speed_10m | 0.128 |
+<!-- MONITORING:END -->
+
+The weather inputs drift through autumn 2026, which has been unusually warm and dry in Paris. The
+observed weather archive shows the same, so the alert reflects a real change in the inputs, not a
+data fault.
+
 ## Limitations
 
 - The second week of the Toussaint school holidays is still poorly covered: the school-holiday
@@ -105,6 +153,9 @@ when the new version beats the current champion's backtest MAE on the same snaps
 - Folds cover September to early November only. Summer and winter behaviour is trained on but not
   scored.
 - One weather point for the whole city.
+- Live monitoring has only started; the live scores cover a handful of days so far.
+- The API serves the weekly forecast, so a forecast issued on Monday is up to a week old by Sunday.
+  The model was never trained to update mid-week.
 
 ## Data
 
@@ -153,11 +204,16 @@ uv run python -m ingest.sources_report
 uv run python -m scripts.render_readme
 ```
 
+The API runs at the port in docker-compose.yml, for example
+`curl localhost:8090/forecast/<counter_id>`; `curl localhost:8090/counters` lists the ids.
+
 Backtest (with the stack running):
 
 ```bash
 uv run python -m forecast.snapshot
 uv run python -m forecast.backtest   # baselines and LightGBM, about 10 minutes
 uv run python -m forecast.train      # MLflow run, registry and champion decision
+uv run python -m forecast.seed_backtest
+uv run python -m forecast.monitor    # scores and drift, writes results/monitoring.json
 uv run python -m scripts.render_readme
 ```

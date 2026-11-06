@@ -1,0 +1,65 @@
+apiVersion: 1
+groups:
+  - orgId: 1
+    name: bike-forecast-monitoring
+    folder: Paris bikes
+    interval: 1h
+    rules:
+      - uid: bikes-psi-drift
+        title: Feature drift above 0.2 PSI
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange: {from: 86400, to: 0}
+            datasourceUid: bikes-pg
+            model:
+              refId: A
+              format: time_series
+              rawQuery: true
+              editorMode: code
+              rawSql: >-
+                SELECT now() AS time, max(psi) AS value FROM feature_drift
+                WHERE day = (SELECT max(day) FROM feature_drift)
+          - refId: B
+            datasourceUid: __expr__
+            model: {refId: B, type: reduce, expression: A, reducer: last, datasource: {type: __expr__, uid: __expr__}}
+          - refId: C
+            datasourceUid: __expr__
+            model: {refId: C, type: threshold, expression: B, datasource: {type: __expr__, uid: __expr__},
+                    conditions: [{evaluator: {type: gt, params: [0.2]}}]}
+        noDataState: OK
+        execErrState: Error
+        for: 0s
+        dashboardUid: bikes-model-monitoring
+        panelId: 3
+        annotations:
+          summary: The last 28 days of at least one model input differ from the same weeks in earlier years by more than 0.2 PSI.
+      - uid: bikes-low-coverage
+        title: 7-day interval coverage below 0.7
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange: {from: 86400, to: 0}
+            datasourceUid: bikes-pg
+            model:
+              refId: A
+              format: time_series
+              rawQuery: true
+              editorMode: code
+              rawSql: >-
+                SELECT now() AS time, sum(coverage_80 * rows) / sum(rows) AS value FROM forecast_scores
+                WHERE source = 'live' AND day > (SELECT max(day) FROM forecast_scores) - 7
+          - refId: B
+            datasourceUid: __expr__
+            model: {refId: B, type: reduce, expression: A, reducer: last, datasource: {type: __expr__, uid: __expr__}}
+          - refId: C
+            datasourceUid: __expr__
+            model: {refId: C, type: threshold, expression: B, datasource: {type: __expr__, uid: __expr__},
+                    conditions: [{evaluator: {type: lt, params: [0.7]}}]}
+        noDataState: OK
+        execErrState: Error
+        for: 0s
+        dashboardUid: bikes-model-monitoring
+        panelId: 2
+        annotations:
+          summary: Fewer than 70% of the last week's live actuals fell inside the 80% interval.

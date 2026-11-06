@@ -24,6 +24,7 @@ from forecast.lgbm import MODELS as LGBM
 
 ROOT = Path(__file__).resolve().parents[1]
 SNAPSHOT_DIR = ROOT / "data" / "snapshot"
+PREDICTIONS = ROOT / "data" / "backtest" / "predictions.parquet"
 RESULTS = ROOT / "results"
 HORIZON = 168
 FOLDS = 8
@@ -84,7 +85,10 @@ def run(
     cutoffs: list[pd.Timestamp],
     horizon: int = HORIZON,
     exog: dict | None = None,
+    predictions: list[pd.DataFrame] | None = None,
 ) -> dict:
+    """Score every model on every fold. If `predictions` is a list, each fold's forecasts are
+    appended to it (with `model` and `cutoff` columns) so they can be stored."""
     models = list(models)
     folds, pooled = [], {m.name: [] for m in models}
     for i, cutoff in enumerate(cutoffs, start=1):
@@ -106,6 +110,8 @@ def run(
                 raise RuntimeError(f"{model.name} left hours without a forecast at fold {i}")
             fold["models"][model.name] = _score(scored)
             pooled[model.name].append(scored)
+            if predictions is not None:
+                predictions.append(fc.assign(model=model.name, cutoff=cutoff))
         folds.append(fold)
     overall = {}
     for model in models:
@@ -160,7 +166,10 @@ def main(argv: list[str] | None = None, registry: dict[str, Callable[[], Forecas
     data = load_snapshot()
     cutoffs = fold_cutoffs(data["ds"].max(), args.folds)
     exog = load_exog()
-    result = run([registry[name]() for name in args.models], data, cutoffs, exog=exog)
+    predictions: list[pd.DataFrame] = []
+    result = run([registry[name]() for name in args.models], data, cutoffs, exog=exog, predictions=predictions)
+    PREDICTIONS.parent.mkdir(parents=True, exist_ok=True)
+    pd.concat(predictions, ignore_index=True).to_parquet(PREDICTIONS, index=False)
     result = {"snapshot": snapshot, **result}
     Path(args.out).write_text(json.dumps(result, indent=2) + "\n")
     for name, s in result["overall"].items():
