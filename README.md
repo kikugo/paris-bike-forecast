@@ -15,20 +15,35 @@ Work in progress. Results are added phase by phase.
 ## Results
 
 <!-- BACKTEST:START -->
-| Fold | Week from | Counters | Seasonal naive (same hour last week) MAE | RMSE | sMAPE % | Seasonal naive, 4-week average MAE | RMSE | sMAPE % |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | 2026-08-31 | 94 | 37.07 | 67.80 | 45.3 | 47.13 | 84.70 | 50.6 |
-| 2 | 2026-09-07 | 95 | 16.73 | 32.18 | 27.7 | 41.52 | 73.83 | 43.1 |
-| 3 | 2026-09-14 | 95 | 14.76 | 25.82 | 25.7 | 30.89 | 53.93 | 35.0 |
-| 4 | 2026-09-21 | 95 | 17.94 | 39.38 | 29.1 | 20.22 | 39.55 | 29.6 |
-| 5 | 2026-09-28 | 95 | 22.37 | 47.45 | 31.9 | 17.45 | 35.78 | 25.5 |
-| 6 | 2026-10-05 | 95 | 20.47 | 40.12 | 30.6 | 18.63 | 35.95 | 28.2 |
-| 7 | 2026-10-12 | 95 | 20.69 | 46.01 | 30.1 | 18.77 | 44.16 | 26.8 |
-| 8 | 2026-10-19 | 95 | 35.65 | 59.52 | 46.0 | 38.10 | 66.20 | 46.5 |
-| **All folds** |  |  | **23.04** | **46.37** | **33.1** | **29.27** | **57.37** | **35.7** |
+| Fold | Week from | Counters | Seasonal naive MAE | 4-week average MAE | LightGBM MAE | LightGBM 80% coverage | Interval width |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 2026-09-07 | 95 | 16.73 | 41.52 | 16.55 | 83% | 74.5 |
+| 2 | 2026-09-14 | 95 | 14.76 | 30.89 | 14.53 | 86% | 72.4 |
+| 3 | 2026-09-21 | 95 | 17.94 | 20.22 | 20.68 | 82% | 68.3 |
+| 4 | 2026-09-28 | 95 | 22.37 | 17.45 | 23.28 | 83% | 78.6 |
+| 5 | 2026-10-05 | 95 | 20.47 | 18.63 | 17.17 | 86% | 80.3 |
+| 6 | 2026-10-12 | 95 | 20.69 | 18.77 | 16.41 | 82% | 56.9 |
+| 7 | 2026-10-19 | 95 | 35.65 | 38.10 | 24.39 | 64% | 53.2 |
+| 8 | 2026-10-26 | 94 | 36.43 | 37.93 | 26.79 | 56% | 56.1 |
+| **All folds** |  |  | **22.96** | **28.06** | **19.80** | **78%** | **67.6** |
 
-8 rolling-origin folds, each trained on every hour before its cutoff and scored on the next 168 hours. Data snapshot 2024-01-01 to 2026-11-01, 95 counters. Scores pool every counter-hour with a known count.
+8 rolling-origin folds, each trained on every hour before its cutoff and scored on the next 168 hours. Data snapshot 2024-01-01 to 2026-11-05, 95 counters. Scores pool every counter-hour with a known count.
 <!-- BACKTEST:END -->
+
+<!-- OVERALL:START -->
+| Model | MAE | RMSE | sMAPE % | MAE vs seasonal naive |
+| --- | --- | --- | --- | --- |
+| Seasonal naive (same hour last week) | 22.96 | 46.27 | 34.4 |  |
+| Seasonal naive, 4-week average | 28.06 | 55.62 | 35.6 | +22.2% |
+| LightGBM (median) | 19.80 | 39.49 | 30.4 | -13.8% |
+<!-- OVERALL:END -->
+
+<!-- CHAMPION:START -->
+Last training run: model version 2, backtest MAE 19.80, not promoted (does not beat the champion). Champion: version 1, MAE 19.80.
+<!-- CHAMPION:END -->
+
+The LightGBM interval holds close to its 80% target in ordinary weeks and falls short in the
+Toussaint school-holiday weeks, which the model has no feature for yet (see Limitations).
 
 ## Architecture
 
@@ -61,7 +76,34 @@ counter-hour, timestamps on the hour, weather values in physical ranges. Results
 - Missing hours in the training history are filled from the same hour of an earlier week, so the
   weekly season never shifts. Missing actuals are not scored.
 - `tests/test_leakage.py` checks every model: a forecast made at a cutoff must not change when all
-  data after the cutoff is deleted.
+  data after the cutoff is deleted, counts and issued weather forecasts alike.
+
+## The model
+
+One LightGBM model for all counters (`forecast/lgbm.py`), trained on one example per Monday in
+the history: features are built as of that Monday and the targets are the following week's hours.
+Three quantile models (0.1, 0.5, 0.9) give the median forecast and an 80% interval.
+
+Every feature is known at the forecast cutoff (`forecast/features.py`):
+
+- counts: the same hour one week earlier, the same hour on the last day before the cutoff, the mean
+  of the same hour over the last four weeks, and the means of the last day and the last week;
+- calendar in Paris local time: hour, day of week, month, public holiday, day before and after;
+- weather **forecasts as they were issued** before the cutoff (Open-Meteo Previous Runs API, one to
+  seven days ahead), never the weather that was later observed;
+- the counter id.
+
+`forecast/train.py` logs each run to MLflow (parameters, per-fold and overall metrics, the backtest
+file), fits the final model on the whole snapshot, registers it, and moves the `champion` alias only
+when the new version beats the current champion's backtest MAE on the same snapshot.
+
+## Limitations
+
+- No school-holiday feature yet: in the Toussaint weeks LightGBM still beats both baselines on MAE,
+  but its 80% interval covers far fewer hours than it should.
+- Folds cover September to early November only. Summer and winter behaviour is trained on but not
+  scored.
+- One weather point for the whole city.
 
 ## Data
 
@@ -84,7 +126,7 @@ under the ODbL.
 <!-- GAPS:START -->
 | Window | Hours | Counters | Kept | Excluded |
 | --- | --- | --- | --- | --- |
-| 2024-01-01 to 2026-11-01 | 24,863 | 187 | 95 | 92 |
+| 2024-01-01 to 2026-11-05 | 24,959 | 187 | 95 | 92 |
 
 A counter is excluded when more than 10% of its hours are missing (no row, or inside a run of at least 24 zero hours).
 <!-- GAPS:END -->
@@ -113,6 +155,7 @@ Backtest (with the stack running):
 
 ```bash
 uv run python -m forecast.snapshot
-uv run python -m forecast.backtest
+uv run python -m forecast.backtest   # baselines and LightGBM, about 10 minutes
+uv run python -m forecast.train      # MLflow run, registry and champion decision
 uv run python -m scripts.render_readme
 ```

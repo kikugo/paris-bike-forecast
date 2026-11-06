@@ -1,40 +1,23 @@
 {
   "snapshot": {
     "start": "2024-01-01T00:00:00+00:00",
-    "end": "2026-11-01T22:00:00+00:00",
+    "end": "2026-11-05T22:00:00+00:00",
     "counters": 95,
-    "rows": 2339111,
-    "rows_with_count": 2333297,
-    "counts_sha256": "620ab6b5c75e35df514ba71948dfe27157006bc661350d6c7d0da86d376489d3"
+    "rows": 2348135,
+    "rows_with_count": 2342321,
+    "counts_sha256": "dc20fdd92e89f5991f716c240bc188ee6a3539a3d727760d0bcf1c8675084a33",
+    "weather_forecast_rows": 171115,
+    "weather_forecast_sha256": "3309f1b2265e9d506d1772df6327e302d9bd503bf4b12ccc483e9a27cb910741"
   },
   "horizon_hours": 168,
   "models": {
     "seasonal_naive": "Seasonal naive (same hour last week)",
-    "seasonal_naive_4w": "Seasonal naive, 4-week average"
+    "seasonal_naive_4w": "Seasonal naive, 4-week average",
+    "lightgbm": "LightGBM (median)"
   },
   "folds": [
     {
       "fold": 1,
-      "cutoff": "2026-08-31T00:00:00",
-      "test_end": "2026-09-06T23:00:00",
-      "counters": 94,
-      "models": {
-        "seasonal_naive": {
-          "mae": 37.0691,
-          "rmse": 67.8042,
-          "smape": 45.3253,
-          "n": 15772
-        },
-        "seasonal_naive_4w": {
-          "mae": 47.1303,
-          "rmse": 84.6959,
-          "smape": 50.573,
-          "n": 15772
-        }
-      }
-    },
-    {
-      "fold": 2,
       "cutoff": "2026-09-07T00:00:00",
       "test_end": "2026-09-13T23:00:00",
       "counters": 95,
@@ -50,11 +33,20 @@
           "rmse": 73.8296,
           "smape": 43.139,
           "n": 15866
+        },
+        "lightgbm": {
+          "mae": 16.5502,
+          "rmse": 31.3621,
+          "smape": 26.4731,
+          "n": 15866,
+          "coverage_80": 0.8283,
+          "interval_width": 74.5111,
+          "pinball": 5.8075
         }
       }
     },
     {
-      "fold": 3,
+      "fold": 2,
       "cutoff": "2026-09-14T00:00:00",
       "test_end": "2026-09-20T23:00:00",
       "counters": 95,
@@ -70,11 +62,20 @@
           "rmse": 53.9305,
           "smape": 34.9714,
           "n": 15921
+        },
+        "lightgbm": {
+          "mae": 14.5284,
+          "rmse": 27.0861,
+          "smape": 24.49,
+          "n": 15921,
+          "coverage_80": 0.8582,
+          "interval_width": 72.4169,
+          "pinball": 5.2339
         }
       }
     },
     {
-      "fold": 4,
+      "fold": 3,
       "cutoff": "2026-09-21T00:00:00",
       "test_end": "2026-09-27T23:00:00",
       "counters": 95,
@@ -90,11 +91,20 @@
           "rmse": 39.5538,
           "smape": 29.575,
           "n": 13604
+        },
+        "lightgbm": {
+          "mae": 20.6789,
+          "rmse": 42.7563,
+          "smape": 28.7112,
+          "n": 13604,
+          "coverage_80": 0.8243,
+          "interval_width": 68.3088,
+          "pinball": 6.7907
         }
       }
     },
     {
-      "fold": 5,
+      "fold": 4,
       "cutoff": "2026-09-28T00:00:00",
       "test_end": "2026-10-04T23:00:00",
       "counters": 95,
@@ -110,11 +120,20 @@
           "rmse": 35.7774,
           "smape": 25.4772,
           "n": 13661
+        },
+        "lightgbm": {
+          "mae": 23.2765,
+          "rmse": 44.1576,
+          "smape": 30.6666,
+          "n": 13661,
+          "coverage_80": 0.8275,
+          "interval_width": 78.6052,
+          "pinball": 7.1509
         }
       }
     },
     {
-      "fold": 6,
+      "fold": 5,
       "cutoff": "2026-10-05T00:00:00",
       "test_end": "2026-10-11T23:00:00",
       "counters": 95,
@@ -130,11 +149,20 @@
           "rmse": 35.9547,
           "smape": 28.2259,
           "n": 15806
+        },
+        "lightgbm": {
+          "mae": 17.1732,
+          "rmse": 34.1995,
+          "smape": 28.5853,
+          "n": 15806,
+          "coverage_80": 0.8607,
+          "interval_width": 80.2939,
+          "pinball": 6.1484
         }
       }
     },
     {
-      "fold": 7,
+      "fold": 6,
       "cutoff": "2026-10-12T00:00:00",
       "test_end": "2026-10-18T23:00:00",
       "counters": 95,
@@ -150,11 +178,20 @@
           "rmse": 44.1615,
           "smape": 26.8368,
           "n": 15890
+        },
+        "lightgbm": {
+          "mae": 16.4144,
+          "rmse": 38.6601,
+          "smape": 25.0225,
+          "n": 15890,
+          "coverage_80": 0.8182,
+          "interval_width": 56.9,
+          "pinball": 5.5703
         }
       }
     },
     {
-      "fold": 8,
+      "fold": 7,
       "cutoff": "2026-10-19T00:00:00",
       "test_end": "2026-10-25T23:00:00",
       "counters": 95,
@@ -170,22 +207,69 @@
           "rmse": 66.2035,
           "smape": 46.4579,
           "n": 13312
+        },
+        "lightgbm": {
+          "mae": 24.3853,
+          "rmse": 45.5405,
+          "smape": 37.2298,
+          "n": 13312,
+          "coverage_80": 0.6393,
+          "interval_width": 53.1768,
+          "pinball": 7.8278
+        }
+      }
+    },
+    {
+      "fold": 8,
+      "cutoff": "2026-10-26T00:00:00",
+      "test_end": "2026-11-01T23:00:00",
+      "counters": 94,
+      "models": {
+        "seasonal_naive": {
+          "mae": 36.4257,
+          "rmse": 67.2654,
+          "smape": 55.0493,
+          "n": 15787
+        },
+        "seasonal_naive_4w": {
+          "mae": 37.9313,
+          "rmse": 75.2412,
+          "smape": 49.5028,
+          "n": 15787
+        },
+        "lightgbm": {
+          "mae": 26.7858,
+          "rmse": 49.2208,
+          "smape": 43.0422,
+          "n": 15787,
+          "coverage_80": 0.5644,
+          "interval_width": 56.062,
+          "pinball": 9.0051
         }
       }
     }
   ],
   "overall": {
     "seasonal_naive": {
-      "mae": 23.0444,
-      "rmse": 46.3696,
-      "smape": 33.1332,
-      "n": 119832
+      "mae": 22.9614,
+      "rmse": 46.2695,
+      "smape": 34.4156,
+      "n": 119847
     },
     "seasonal_naive_4w": {
-      "mae": 29.2692,
-      "rmse": 57.3744,
-      "smape": 35.7189,
-      "n": 119832
+      "mae": 28.0597,
+      "rmse": 55.6158,
+      "smape": 35.5798,
+      "n": 119847
+    },
+    "lightgbm": {
+      "mae": 19.7997,
+      "rmse": 39.4887,
+      "smape": 30.4053,
+      "n": 119847,
+      "coverage_80": 0.7789,
+      "interval_width": 67.6233,
+      "pinball": 6.6551
     }
   }
 }
