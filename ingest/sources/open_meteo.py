@@ -8,6 +8,7 @@ API with `past_days` for the last hours, which the archive may not cover yet. Ro
 from datetime import date
 
 import httpx
+import numpy as np
 import pandas as pd
 
 from ingest import config
@@ -99,3 +100,21 @@ def previous_runs(client: httpx.Client, start: date, end: date) -> pd.DataFrame:
     )
     resp.raise_for_status()
     return parse_previous_runs(resp.json())
+
+
+def forecast_at_issue(client: httpx.Client, origin: pd.Timestamp, horizon: int) -> pd.DataFrame:
+    """The current weather forecast for the `horizon` hours after `origin`, in the shape the
+    model expects: one row per hour with the lead day the backtest used for that hour.
+
+    This is the live counterpart of the Previous Runs data: a forecast that exists when the
+    weekly forecast is issued.
+    """
+    resp = client.get(FORECAST_URL, params=_params(forecast_days=9) | {"hourly": ",".join(FORECAST_VARIABLES)})
+    resp.raise_for_status()
+    hourly = resp.json()["hourly"]
+    df = pd.DataFrame({v: hourly[v] for v in FORECAST_VARIABLES})
+    df.insert(0, "ts", pd.to_datetime(hourly["time"]))  # naive UTC, like the forecast package
+    lead = (df["ts"] - origin) / pd.Timedelta(hours=1)
+    df = df[(lead >= 0) & (lead < horizon)].copy()
+    df.insert(1, "lead_day", np.maximum(1, np.ceil(lead[df.index] / 24)).astype(int))
+    return df.reset_index(drop=True)

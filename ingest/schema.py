@@ -125,6 +125,47 @@ zero_runs = Table(
     Column("hours", Integer, nullable=False),
 )
 
+# Forecasts as issued: `live` ones from the weekly DAG, `backtest` ones from the backtest folds
+# (each made by a model trained only on data before its cutoff).
+forecasts = Table(
+    "forecasts",
+    metadata,
+    Column("source", String, primary_key=True),
+    Column("origin", DateTime(timezone=True), primary_key=True),
+    Column("counter_id", String, primary_key=True),
+    Column("ts", DateTime(timezone=True), primary_key=True),
+    Column("q10", Float, nullable=False),
+    Column("q50", Float, nullable=False),
+    Column("q90", Float, nullable=False),
+    Column("model_version", String, nullable=False),
+    Column("issued_at", DateTime(timezone=True), nullable=False),
+    Index("ix_forecasts_counter_ts", "counter_id", "ts"),
+)
+
+forecast_scores = Table(
+    "forecast_scores",
+    metadata,
+    Column("day", Date, primary_key=True),
+    Column("source", String, primary_key=True),
+    Column("model_version", String, primary_key=True),
+    Column("rows", Integer, nullable=False),
+    Column("mae", Float, nullable=False),
+    Column("coverage_80", Float, nullable=False),
+    Column("interval_width", Float, nullable=False),
+    Column("scored_at", DateTime(timezone=True), nullable=False),
+)
+
+feature_drift = Table(
+    "feature_drift",
+    metadata,
+    Column("day", Date, primary_key=True),
+    Column("feature", String, primary_key=True),
+    Column("psi", Float, nullable=False),
+    Column("reference_rows", Integer, nullable=False),
+    Column("current_rows", Integer, nullable=False),
+    Column("computed_at", DateTime(timezone=True), nullable=False),
+)
+
 # Counts from kept counters inside the window, with hours inside long zero runs set to NULL.
 COUNTS_CLEAN_VIEW = """
     CREATE OR REPLACE VIEW counts_clean AS

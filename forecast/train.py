@@ -143,6 +143,7 @@ def main() -> None:
             )
         version = mlflow.register_model(info.model_uri, MODEL_NAME)
         for key, value in {"backtest_mae": overall["mae"], "snapshot_sha256": snap_id,
+                           "snapshot_end": snapshot["end"],
                            "params": json.dumps(model.params, sort_keys=True)}.items():
             client.set_model_version_tag(MODEL_NAME, version.version, key, str(value))
 
