@@ -1,4 +1,6 @@
-"""French public holidays, refreshed once a year (the API covers 20 years back, 5 ahead)."""
+"""French public holidays and Paris school holidays, refreshed once a year.
+
+Both are published years ahead (public holidays: 20 years back, 5 ahead)."""
 
 from datetime import datetime, timedelta
 
@@ -22,7 +24,16 @@ def holidays_yearly():
         db.init_db(engine)
         return pipeline.load_holidays(engine)
 
+    @task
+    def load_school() -> int:
+        from ingest import db, pipeline
+
+        engine = db.get_engine()
+        db.init_db(engine)
+        return pipeline.load_school_holidays(engine)
+
     load()
+    load_school()
 
 
 holidays_yearly()
