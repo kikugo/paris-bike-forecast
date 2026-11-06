@@ -79,4 +79,6 @@ def test_champion_line():
     )
     later = first | {"promote": False, "reason": "does not beat the champion", "candidate_version": "2",
                      "champion_version": "1", "champion_mae": 19.8}
-    assert rr.champion_line(later).endswith("Champion: version 1, MAE 19.80.")
+    assert rr.champion_line(later).endswith(" Champion: version 1, MAE 19.80.")
+    promoted = later | {"promote": True, "reason": "beats the champion", "candidate_mae": 19.1}
+    assert rr.champion_line(promoted).endswith("Previous champion: version 1, MAE 19.80.")

@@ -7,7 +7,8 @@
     "rows_with_count": 2342321,
     "counts_sha256": "dc20fdd92e89f5991f716c240bc188ee6a3539a3d727760d0bcf1c8675084a33",
     "weather_forecast_rows": 171115,
-    "weather_forecast_sha256": "3309f1b2265e9d506d1772df6327e302d9bd503bf4b12ccc483e9a27cb910741"
+    "weather_forecast_sha256": "3309f1b2265e9d506d1772df6327e302d9bd503bf4b12ccc483e9a27cb910741",
+    "school_holiday_periods": 63
   },
   "horizon_hours": 168,
   "models": {
@@ -35,13 +36,13 @@
           "n": 15866
         },
         "lightgbm": {
-          "mae": 16.5502,
-          "rmse": 31.3621,
-          "smape": 26.4731,
+          "mae": 16.6538,
+          "rmse": 31.0495,
+          "smape": 27.3552,
           "n": 15866,
-          "coverage_80": 0.8283,
-          "interval_width": 74.5111,
-          "pinball": 5.8075
+          "coverage_80": 0.8233,
+          "interval_width": 70.5972,
+          "pinball": 5.7383
         }
       }
     },
@@ -64,13 +65,13 @@
           "n": 15921
         },
         "lightgbm": {
-          "mae": 14.5284,
-          "rmse": 27.0861,
-          "smape": 24.49,
+          "mae": 14.5081,
+          "rmse": 27.2416,
+          "smape": 24.4039,
           "n": 15921,
-          "coverage_80": 0.8582,
-          "interval_width": 72.4169,
-          "pinball": 5.2339
+          "coverage_80": 0.8596,
+          "interval_width": 68.3559,
+          "pinball": 5.0946
         }
       }
     },
@@ -93,13 +94,13 @@
           "n": 13604
         },
         "lightgbm": {
-          "mae": 20.6789,
-          "rmse": 42.7563,
-          "smape": 28.7112,
+          "mae": 20.4346,
+          "rmse": 42.639,
+          "smape": 28.764,
           "n": 13604,
-          "coverage_80": 0.8243,
-          "interval_width": 68.3088,
-          "pinball": 6.7907
+          "coverage_80": 0.837,
+          "interval_width": 69.9758,
+          "pinball": 6.7374
         }
       }
     },
@@ -122,13 +123,13 @@
           "n": 13661
         },
         "lightgbm": {
-          "mae": 23.2765,
-          "rmse": 44.1576,
-          "smape": 30.6666,
+          "mae": 23.9927,
+          "rmse": 45.4508,
+          "smape": 30.2429,
           "n": 13661,
-          "coverage_80": 0.8275,
-          "interval_width": 78.6052,
-          "pinball": 7.1509
+          "coverage_80": 0.8316,
+          "interval_width": 76.9771,
+          "pinball": 7.2302
         }
       }
     },
@@ -151,13 +152,13 @@
           "n": 15806
         },
         "lightgbm": {
-          "mae": 17.1732,
-          "rmse": 34.1995,
-          "smape": 28.5853,
+          "mae": 16.1102,
+          "rmse": 32.1591,
+          "smape": 27.379,
           "n": 15806,
-          "coverage_80": 0.8607,
-          "interval_width": 80.2939,
-          "pinball": 6.1484
+          "coverage_80": 0.8872,
+          "interval_width": 76.0475,
+          "pinball": 5.7265
         }
       }
     },
@@ -180,13 +181,13 @@
           "n": 15890
         },
         "lightgbm": {
-          "mae": 16.4144,
-          "rmse": 38.6601,
-          "smape": 25.0225,
+          "mae": 16.5732,
+          "rmse": 37.7907,
+          "smape": 25.2107,
           "n": 15890,
-          "coverage_80": 0.8182,
-          "interval_width": 56.9,
-          "pinball": 5.5703
+          "coverage_80": 0.8126,
+          "interval_width": 54.0822,
+          "pinball": 5.4611
         }
       }
     },
@@ -209,13 +210,13 @@
           "n": 13312
         },
         "lightgbm": {
-          "mae": 24.3853,
-          "rmse": 45.5405,
-          "smape": 37.2298,
+          "mae": 19.2913,
+          "rmse": 37.3854,
+          "smape": 33.916,
           "n": 13312,
-          "coverage_80": 0.6393,
-          "interval_width": 53.1768,
-          "pinball": 7.8278
+          "coverage_80": 0.7346,
+          "interval_width": 54.3959,
+          "pinball": 6.4201
         }
       }
     },
@@ -238,13 +239,13 @@
           "n": 15787
         },
         "lightgbm": {
-          "mae": 26.7858,
-          "rmse": 49.2208,
-          "smape": 43.0422,
+          "mae": 26.6574,
+          "rmse": 49.8331,
+          "smape": 43.4392,
           "n": 15787,
-          "coverage_80": 0.5644,
-          "interval_width": 56.062,
-          "pinball": 9.0051
+          "coverage_80": 0.5719,
+          "interval_width": 54.5354,
+          "pinball": 9.1852
         }
       }
     }
@@ -263,13 +264,13 @@
       "n": 119847
     },
     "lightgbm": {
-      "mae": 19.7997,
-      "rmse": 39.4887,
-      "smape": 30.4053,
+      "mae": 19.1628,
+      "rmse": 38.421,
+      "smape": 30.0185,
       "n": 119847,
-      "coverage_80": 0.7789,
-      "interval_width": 67.6233,
-      "pinball": 6.6551
+      "coverage_80": 0.7947,
+      "interval_width": 65.57,
+      "pinball": 6.4277
     }
   }
 }
