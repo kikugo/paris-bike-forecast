@@ -14,6 +14,8 @@ Work in progress. Results are added phase by phase.
 
 ## Results
 
+![Seven-day forecast for the busiest counter in the last backtest fold: LightGBM median, 80% interval and observed counts](docs/images/forecast-week.webp)
+
 <!-- BACKTEST:START -->
 | Fold | Week from | Counters | Seasonal naive MAE | 4-week average MAE | LightGBM MAE | LightGBM 80% coverage | Interval width |
 | --- | --- | --- | --- | --- | --- | --- | --- |
